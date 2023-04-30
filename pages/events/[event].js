@@ -185,7 +185,9 @@ export async function getStaticProps({ params }) {
       .select("*")
       .eq("id", params.event);
 
-    const transformedImages = transformImages(eventData[0].images);
+    const [eventObj] = eventData;
+
+    const transformedImages = transformImages(eventObj.images);
     let newImageUrls = [];
     if (transformedImages.length > 1) {
       newImageUrls = transformedImages.map((image) => {
@@ -197,7 +199,7 @@ export async function getStaticProps({ params }) {
 
     return {
       props: {
-        eventData: eventData[0],
+        eventData: eventObj,
         newImageUrls,
       },
     };

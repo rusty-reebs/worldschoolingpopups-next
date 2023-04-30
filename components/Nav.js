@@ -17,13 +17,7 @@ export default function Nav() {
       <div className="flex flex-col">
         <h1 className="flex text-white text-lg lg:text-2xl">
           <Link href="/events">
-            <Image
-              src="/globe-favicon.svg"
-              // style={{ display: "inline" }}
-              width={30}
-              height={30}
-              alt="logo"
-            />
+            <Image src="/globe-favicon.svg" width={30} height={30} alt="logo" />
           </Link>
           &nbsp;worldschoolingpopups.com
         </h1>

@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { addData } from "../../_helpers/addData";
 import Link from "next/link";
 import Button from "@/components/components/Button";
+import Badge from "@/components/components/Badge";
 
 // TODO About component in react-modern-drawer?
 
@@ -21,7 +22,7 @@ export async function getStaticProps() {
       .select("updated")
       .order("updated", { ascending: false })
       .limit(1);
-    const lastUpdatedObj = lastUpdatedArray[0];
+    const [lastUpdatedObj] = lastUpdatedArray;
 
     const { data } = await supabaseAdmin.from("testEvents").select("*");
     // console.log("supabase data", data);
@@ -48,11 +49,10 @@ export default function Events({ events, lastUpdated }) {
     <>
       <Nav />
       <div className="flex flex-col mx-4 lg:flex lg:flex-col lg:justify-center lg:mx-10">
-        <div className="text-center mb-4 lg:grid lg:grid-cols-3 lg:justify-items-center 2xl:grid 2xl:grid-cols-5 2xl:justify-items-center">
-          <h3 className="text-lg lg:text-2xl lg:col-start-2 2xl:col-start-3">
-            Events - Current and Upcoming{" "}
-            <p className="inline-block text-base">({events.length})</p>
-          </h3>
+        <div className="text-center mb-10 lg:grid lg:grid-cols-3 lg:justify-items-center 2xl:grid 2xl:grid-cols-5 2xl:justify-items-center">
+          <div className="flex text-lg lg:text-2xl lg:col-start-2 2xl:col-start-3">
+            Events - Current and Upcoming <Badge number={events.length} />
+          </div>
           {/* <button className="bg-red text-white" onClick={() => addData()}>
             BOOM
           </button> */}
