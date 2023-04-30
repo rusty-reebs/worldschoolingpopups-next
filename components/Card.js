@@ -18,7 +18,7 @@ export default function Card({
   return (
     <div className="">
       <div className="h-full w-full">
-        <div className="relative aspect-4/3 rounded-md mb-3 w-full">
+        <div className="relative aspect-4/3 rounded-md mb-3">
           <Image
             src={imageUrl}
             className={`rounded-md ${
@@ -28,7 +28,9 @@ export default function Card({
             }`}
             alt="eventimage"
             fill
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "fill" }}
+            sizes="(max-width: 768px) 100vw"
+            priority
             onLoadingComplete={() => setIsLoading(false)}
           />
           {today > endDate && start != null ? (

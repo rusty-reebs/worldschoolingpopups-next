@@ -5,8 +5,10 @@ const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }) {
   return (
-    <div className={merriweatherSans.className}>
+    <main
+      className={`${merriweatherSans.className} bg-yellow text-black min-h-screen w-full`}
+    >
       <Component {...pageProps} />
-    </div>
+    </main>
   );
 }

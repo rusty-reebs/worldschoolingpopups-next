@@ -18,18 +18,18 @@ export default function CarouselComp({ images }) {
       .image(image.cloudinary_id)
       .resize(crop().gravity(focusOn("custom")));
   });
+
   return (
     <Carousel showThumbs={false}>
       {processedImages.map((image, index) => {
-        // const { url } = image;
         let newUrl = image.toURL();
         return (
-          <div key={index}>
+          <div key={index} className="relative h-72">
             <Image
               src={newUrl}
               alt={"eventimage" + index}
               fill
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "fit" }}
             />
           </div>
         );
