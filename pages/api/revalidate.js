@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   }
   try {
     // Regenerate index route with new data from Supabase
-    await res.revalidate("/");
+    await res.revalidate("/events");
     return res.json({ revalidated: true });
   } catch (err) {
     // if error, will continue to show last successful page
