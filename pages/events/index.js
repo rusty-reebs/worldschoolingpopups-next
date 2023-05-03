@@ -10,6 +10,7 @@ import Badge from "@/components/components/Badge";
 
 // TODO About component in react-modern-drawer?
 // TODO Image placeholders blur on [event].js
+// * green comments
 
 export const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
