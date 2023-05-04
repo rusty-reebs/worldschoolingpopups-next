@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 import Nav from "../../components/Nav";
 import Card from "../../components/Card";
 import { transformImages } from "../../_helpers/cloudinary";
@@ -7,15 +6,11 @@ import { addData } from "../../_helpers/addData";
 import Link from "next/link";
 import Button from "@/components/components/Button";
 import Badge from "@/components/components/Badge";
+import { supabaseAdmin } from "@/components/supabase";
 
 // TODO About component in react-modern-drawer?
 // TODO Image placeholders blur on [event].js
 // * green comments
-
-export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY
-);
 
 export async function getStaticProps() {
   try {

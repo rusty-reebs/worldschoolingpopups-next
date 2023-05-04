@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Nav from "@/components/components/Nav"; // import { exportArray } from "../../_helpers/exportArray";
 import { FaArchive, FaEdit, FaEye, FaHourglass, FaTrash } from "react-icons/fa";
 import { CgUnavailable } from "react-icons/cg";
-import { supabaseAdmin } from "../events";
+import { supabaseAdmin } from "@/components/supabase";
 import { useRouter } from "next/router";
 
 export default function Admin() {
   const [isLoading, setIsLoading] = useState(true);
   const [isWorking, setIsWorking] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [allEvents, setAllEvents] = useState([]);
+  const [masterEvents, setMasterEvents] = useState([]); //TODO useMemo
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -23,6 +23,7 @@ export default function Admin() {
           .select("*")
           .order("eventType", { ascending: false })
           .order("start", { ascending: false });
+        setMasterEvents(data);
         setEvents(data);
         setIsLoading(false);
       } catch (err) {
@@ -37,9 +38,7 @@ export default function Admin() {
       const id = parseInt(url.split("/")[2]);
       setIsWorking(id);
     };
-    const handleStop = (url) => {
-      console.log("👉 route stop url", url);
-    };
+    const handleStop = (url) => {};
 
     router.events.on("routeChangeStart", handleStart);
     router.events.on("routeChangeComplete", handleStop);
@@ -51,8 +50,8 @@ export default function Admin() {
   }, [router]);
 
   const handleSearch = (e) => {
-    const result = events.filter((event) => {
-      if (e.currentTarget.value === "") return events;
+    const result = masterEvents.filter((event) => {
+      if (e.currentTarget.value === "") return masterEvents;
       return event.name
         .toLowerCase()
         .includes(e.currentTarget.value.toLowerCase());
@@ -142,13 +141,17 @@ export default function Admin() {
         .from("testEvents")
         .delete()
         .eq("id", id);
+      // TODO delete images from Cloudinary
+      // const response = await fetch("/api/cloudinary-delete", {
+      //   body: JSON.stringify(imagesArray) //! need public ID strings
+      // })
+      // //* add to line below --> && response.ok? or response.status === 200
       if (!error) {
         setEvents((prev) => prev.filter((event) => event.id !== id));
       } else setErrorMessage("Oops! Something broke! 😪");
     } catch (err) {
       console.log(err);
     }
-    // TODO delete images from Cloudinary
   };
 
   // const handleLogout = async () => {
@@ -198,6 +201,12 @@ export default function Admin() {
               />
             </div>
             <div className="ml-auto mr-11">
+              <button
+                className="bg-darkblue text-white py-1 px-3 border rounded-lg mr-4"
+                onClick={() => router.push("/admin/event/new")}
+              >
+                Add New
+              </button>
               <button
                 className="bg-darkblue text-white py-1 px-3 border rounded-lg mr-4"
                 // onClick={() => exportArray("ws-export.json", eventData)}
