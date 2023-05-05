@@ -1,4 +1,4 @@
-import EventForm from "@/components/components/Event";
+import EventForm from "@/components/components/EventForm";
 
 export default function NewEvent() {
   return <EventForm isNew={true} />;

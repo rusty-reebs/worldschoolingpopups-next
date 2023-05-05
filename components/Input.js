@@ -72,7 +72,7 @@ const TextAreaInput = ({ name, label, required, value, onChange }) => {
       <textarea
         value={value}
         onChange={onChange}
-        rows="5"
+        rows="8"
         className="bg-white text-base font-light w-full focus:outline-none px-2"
       />
     </div>

@@ -203,7 +203,7 @@ export default function Admin() {
             <div className="ml-auto mr-11">
               <button
                 className="bg-darkblue text-white py-1 px-3 border rounded-lg mr-4"
-                onClick={() => router.push("/admin/event/new")}
+                onClick={() => router.push("/admin/new")}
               >
                 Add New
               </button>

@@ -5,42 +5,34 @@ import Nav from "./Nav";
 import Input, { CountryInput, SessionSelect, TextAreaInput } from "./Input";
 import { format } from "date-fns";
 import { supabaseAdmin } from "../supabase";
+import { useRouter } from "next/router";
 
-export default function EventForm({ isNew }) {
+export default function EventForm({ isNew, id }) {
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  //   useEffect(() => {
-  //     const getEvent = async () => {
-  //       try {
-  //         const data = await fetch(myApi + "/events/" + eventId, {
-  //           method: "GET",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           credentials: "include",
-  //         });
-  //         if (data.ok) {
-  //           const result = await data.json();
-  //           console.log("👉 result", result);
-  //           setForm({
-  //             ...result,
-  //             date: {
-  //               ...result.date,
-  //               start: format(new Date(result?.date?.start), "yyyy-MM-dd"),
-  //               end: format(new Date(result?.date?.end), "yyyy-MM-dd"),
-  //             },
-  //           });
-  //           setIsLoading(false);
-  //         } else navigate("/login");
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //     getEvent();
-  //   }, []);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (id) {
+      //TODO need a loading overlay here
+      const getEvent = async () => {
+        try {
+          const { data } = await supabaseAdmin
+            .from("testEvents")
+            .select("*")
+            .eq("id", id);
+          console.log("👉 data", data);
+          setForm(...data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getEvent();
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,30 +45,42 @@ export default function EventForm({ isNew }) {
         });
         if (error) {
           setErrorMessage("Oh no! Something broke. 😪");
+          //TODO more error handling here
+          //TODO delete images
           console.log(error);
         }
       } else {
-        const { error } = await supabaseAdmin.from("testEvents").insert({
-          name: form?.name,
-          country: form?.country,
-          isGlobal: form?.isGlobal,
-          city: form?.city,
-          isMultiple: form?.isMultiple,
-          lat: form?.lat,
-          lon: form?.lon,
-          eventType: form?.eventType,
-          start: form?.start,
-          end: form?.end,
-          min: form?.min,
-          max: form?.max,
-          description: form?.description,
-          email: form?.email,
-          fbPage: form?.fbPage,
-          website: form?.website,
-          //   images: images,
-        });
+        const { error } = await supabaseAdmin
+          .from("testEvents")
+          .update({
+            name: form?.name,
+            country: form?.country,
+            isGlobal: form?.isGlobal,
+            city: form?.city,
+            isMultipleLocations: form?.isMultipleLocations,
+            lat: form?.lat,
+            lon: form?.lon,
+            eventType: form?.eventType,
+            start: form?.start,
+            end: form?.end,
+            min: form?.min,
+            max: form?.max,
+            description: form?.description,
+            email: form?.email,
+            fbPage: form?.fbPage,
+            website: form?.website,
+            //   images: images,
+          })
+          .eq("id", id);
+        if (!error) {
+          setSuccess(true);
+          setTimeout(() => {
+            router.push("/admin");
+          }, 800);
+        }
         if (error) {
           setErrorMessage("Oh no! Something broke. 😪");
+          //TODO more error handling here
           console.log(error);
         }
       }
@@ -139,7 +143,7 @@ export default function EventForm({ isNew }) {
                   <div className="flex items-center mx-auto">
                     <label
                       htmlFor="global"
-                      className="flex gap-4 text-sm font-light placeholder-black"
+                      className="flex gap-3 text-sm font-light placeholder-black"
                     >
                       Global?
                       <input
@@ -163,7 +167,7 @@ export default function EventForm({ isNew }) {
                     placeholder=""
                     label="City"
                     type="text"
-                    disabled={form?.isMultiple}
+                    disabled={form?.isMultipleLocations}
                     value={form?.city}
                     onChange={(e) =>
                       setForm((prev) => ({
@@ -175,18 +179,18 @@ export default function EventForm({ isNew }) {
                   <div className="flex items-center">
                     <label
                       htmlFor="multiple"
-                      className="flex gap-4 text-sm font-light placeholder-black"
+                      className="flex gap-3 text-sm font-light placeholder-black"
                     >
-                      Multiple?
+                      Multiple Locations?
                       <input
                         name="multiple"
                         type="checkbox"
                         className="scale-150"
-                        checked={form?.isMultiple}
+                        checked={form?.isMultipleLocations}
                         onChange={(value) =>
                           setForm((prev) => ({
                             ...prev,
-                            isMultiple: !prev?.isMultiple,
+                            isMultipleLocations: !prev?.isMultipleLocations,
                           }))
                         }
                       />
@@ -373,12 +377,16 @@ export default function EventForm({ isNew }) {
                   </div>
                 </div> */}
                 {errorMessage && (
-                  <div className="flex bg-red text-white text-sm px-2 py-1 items-center rounded-full w-fit mx-auto">
+                  <div className="flex bg-red text-white text-sm px-2 py-1 mt-4 items-center rounded-full w-fit mx-auto">
                     {errorMessage}
                   </div>
                 )}
                 <div className="flex justify-center mt-5">
-                  <Button name="Submit"></Button>
+                  <Button
+                    name="Submit"
+                    type="submit"
+                    disabled={errorMessage ? true : false}
+                  ></Button>
                 </div>
                 {success ? (
                   <p className="text-center">

@@ -8,7 +8,7 @@ import { FaAddressCard } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaGlobe } from "react-icons/fa";
-import { supabaseAdmin } from "../events/index";
+import { supabaseAdmin } from "../../supabase";
 import Image from "next/image";
 import EmbeddedMap from "@/components/components/EmbeddedMap";
 
