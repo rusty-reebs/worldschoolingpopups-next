@@ -20,7 +20,7 @@ export default function Admin() {
       try {
         const { data } = await supabaseAdmin
           .from("testEvents")
-          .select("*")
+          .select("id, name, end, isArchived, isUnavailable, images")
           .order("eventType", { ascending: false })
           .order("start", { ascending: false });
         setMasterEvents(data);
@@ -134,21 +134,44 @@ export default function Admin() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleTest = async () => {
+    const strings = ["abcdef"];
+    const response = await fetch("/api/cloudinary-delete", {
+      method: "POST",
+      body: JSON.stringify(strings),
+    });
+    console.log("👉 response", response);
+  };
+
+  const handleDelete = async (id, imagesArray) => {
+    const public_ids = imagesArray.map((image) => image.cloudinary_id);
     setIsWorking(id);
+    let response = null;
+    let supabaseError = null;
     try {
-      const { error } = await supabaseAdmin
-        .from("testEvents")
-        .delete()
-        .eq("id", id);
-      // TODO delete images from Cloudinary
-      // const response = await fetch("/api/cloudinary-delete", {
-      //   body: JSON.stringify(imagesArray) //! need public ID strings
-      // })
-      // //* add to line below --> && response.ok? or response.status === 200
-      if (!error) {
-        setEvents((prev) => prev.filter((event) => event.id !== id));
-      } else setErrorMessage("Oops! Something broke! 😪");
+      response = await fetch("/api/cloudinary-delete", {
+        method: "POST",
+        body: JSON.stringify(public_ids),
+      });
+      if (!response.ok) {
+        return () => {
+          setErrorMessage("Oops! Something broke! 😪");
+          setIsWorking("");
+        };
+      } else {
+        try {
+          const { error } = await supabaseAdmin
+            .from("testEvents")
+            .delete()
+            .eq("id", id);
+          supabaseError = error;
+        } catch (err) {
+          console.log(err);
+        }
+        if (!supabaseError) {
+          setEvents((prev) => prev.filter((event) => event.id !== id));
+        } else setErrorMessage("Oops! Something broke! 😪");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -216,8 +239,10 @@ export default function Admin() {
               <button
                 className="bg-darkblue text-white py-1 px-3 border rounded-lg"
                 // onClick={() => handleLogout()}
+                onClick={() => handleTest()}
               >
-                Logout
+                {/* Logout */}
+                TEST
               </button>
             </div>
           </div>
@@ -267,7 +292,7 @@ export default function Admin() {
                         <button>
                           <FaTrash
                             size={16}
-                            onClick={() => handleDelete(event.id)}
+                            onClick={() => handleDelete(event.id, event.images)}
                           />
                         </button>
                       </div>

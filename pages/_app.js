@@ -1,5 +1,6 @@
 import "@/components/styles/globals.css";
 import { Merriweather_Sans } from "next/font/google";
+import Script from "next/script";
 
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 
@@ -9,6 +10,7 @@ export default function App({ Component, pageProps }) {
       className={`${merriweatherSans.className} bg-yellow text-black min-h-screen w-full`}
     >
       <Component {...pageProps} />
+      <Script src="https://upload-widget.cloudinary.com/global/all.js" />
     </main>
   );
 }

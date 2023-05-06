@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Map from "./Map";
 import Nav from "./Nav";
-import { supabaseAdmin } from "../pages/events";
+import { supabaseAdmin } from "../supabase";
 
 export default function EventsMap() {
   const [eventLocations, setEventLocations] = useState({});

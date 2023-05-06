@@ -67,6 +67,12 @@ export default function Nav() {
             <i className="fas fa-star text-yellow"></i>
           </p>
         </Link>
+        <Link
+          href="/admin"
+          className="block lg:inline-block text-lightblue hover:text-white px-3 py-3 border-b-2 border-lightblue lg:border-none lg:text-lg"
+        >
+          ⚙️&nbsp;&nbsp;Admin
+        </Link>
       </div>
     </nav>
   );

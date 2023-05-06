@@ -3,24 +3,30 @@ export default async function handler(req, res) {
   const password = process.env.CLOUDINARY_API_SECRET;
   const cloudname = process.env.CLOUDINARY_CLOUDNAME;
   const headers = new Headers();
-  headers.set(
+
+  headers.append("Content-Type", "application/json");
+  headers.append(
     "Authorization",
     "Basic " + Buffer.from(username + ":" + password).toString("base64")
   );
-  const body = JSON.parse(req.body);
-  //* req.body should contain array of Cloudinary public ID strings eg. ["image1", "image2"]
+
+  const bod = JSON.parse(req.body);
+  const myNewBod = {
+    public_ids: bod,
+  };
+  const requestOptions = {
+    method: "DELETE",
+    headers: headers,
+    body: JSON.stringify(myNewBod),
+  };
   try {
-    const data = await fetch(
+    const response = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudname}/resources/image/upload/`,
-      {
-        method: "DELETE",
-        headers: headers,
-        body: JSON.stringify(body),
-      }
+      requestOptions
     );
-    const result = await data.json();
-    //* if result true return res.status(200) instead
-    return res.json(result);
+    if (response.status == 200) {
+      return res.status(200).send();
+    }
   } catch (err) {
     console.log(err);
   }
