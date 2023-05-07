@@ -25,22 +25,25 @@ export default function EventForm({ isNew, id }) {
   useEffect(() => {
     if (!id) setIsLoading(false);
     if (id) {
-      const getEvent = async () => {
-        try {
-          const { data } = await supabaseAdmin
-            .from("testEvents")
-            .select("*")
-            .eq("id", id);
-          console.log("👉 data", data);
-          setForm(...data);
-          setIsLoading(false);
-        } catch (err) {
-          console.log(err);
-        }
-      };
       getEvent();
     }
   }, []);
+
+  const getEvent = async () => {
+    try {
+      const { data } = await supabaseAdmin
+        .from("testEvents")
+        .select("*")
+        .eq("id", id)
+        .single();
+      console.log("👉 data", data);
+      setForm(data);
+      setImages(data.images);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +69,7 @@ export default function EventForm({ isNew, id }) {
       } else {
         const { error } = await supabaseAdmin
           .from("testEvents")
-          .update({ ...form })
+          .update({ ...form, updated: new Date().toISOString() })
           .eq("id", id);
         if (error) {
           console.log(error);
@@ -90,6 +93,11 @@ export default function EventForm({ isNew, id }) {
         <h3 className="text-base text-center mb-4 lg:text-2xl">
           {isNew ? "Create Event" : "Update Event"}
         </h3>
+        {!isNew && form.updated && (
+          <div className="text-sm italic text-center">
+            Last updated: {format(new Date(form.updated), "MMM d, y")}
+          </div>
+        )}
         <div className="lg:w-1/3 lg:mx-auto">
           <p className="text-xs italic font-light text-red mb-2">* required</p>
           <form

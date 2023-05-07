@@ -13,6 +13,7 @@ import Image from "next/image";
 import EmbeddedMap from "@/components/components/EmbeddedMap";
 
 //TODO image loading
+//! getStaticPaths not working?
 
 export default function Detail({ eventData, newImageUrls }) {
   const today = new Date();
@@ -171,12 +172,42 @@ export async function getStaticPaths() {
     }));
     return {
       paths,
-      fallback: false,
+      fallback: "blocking",
     };
   } catch (err) {
     console.log(err);
   }
 }
+
+// export async function getServerSideProps({ params }) {
+//   try {
+//     const { data: eventData } = await supabaseAdmin
+//       .from("testEvents")
+//       .select("*")
+//       .eq("id", params.event);
+
+//     const [eventObj] = eventData;
+
+//     const transformedImages = transformImages(eventObj.images);
+//     let newImageUrls = [];
+//     if (transformedImages.length > 1) {
+//       newImageUrls = transformedImages.map((image) => {
+//         return image.toURL();
+//       });
+//     } else {
+//       newImageUrls = [transformedImages.toURL()];
+//     }
+
+//     return {
+//       props: {
+//         eventData: eventObj,
+//         newImageUrls,
+//       },
+//     };
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
 export async function getStaticProps({ params }) {
   try {

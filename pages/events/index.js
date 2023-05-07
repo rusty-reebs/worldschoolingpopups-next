@@ -10,6 +10,7 @@ import { supabaseAdmin } from "@/components/supabase";
 
 // TODO About component in react-modern-drawer?
 // TODO Image placeholders blur on [event].js
+// TODO supabase webhook not working?
 // * green comments
 
 export async function getStaticProps() {
