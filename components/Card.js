@@ -1,8 +1,21 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import TextBlock from "./TextBlock";
+import ReactCountryFlag from "react-country-flag";
 
 export default function Card({
-  event: { imageUrl, name, country, start, end, eventType },
+  event: {
+    imageUrl,
+    name,
+    country,
+    countryCode,
+    isGlobal,
+    start,
+    end,
+    eventType,
+    isArchived,
+    isUnavailable,
+  },
 }) {
   const [isLoading, setIsLoading] = useState(true);
   let today = new Date();
@@ -33,16 +46,34 @@ export default function Card({
             priority
             onLoadingComplete={() => setIsLoading(false)}
           />
-          {today > endDate && start != null ? (
-            <div className="bg-red absolute font-bold top-0 right-0 text-white text-sm m-3 p-3 rounded-md">
-              COMPLETED
-            </div>
+          {isArchived ? (
+            <TextBlock isArchived />
+          ) : isUnavailable ? (
+            <TextBlock isUnavailable />
+          ) : today > endDate && start != null ? (
+            <TextBlock isCompleted />
           ) : null}
         </div>
       </div>
       <h4 className="text-lg">{name}</h4>
       <div className="flex justify-between">
-        <h5 className="text-sm italic">{country}</h5>
+        <div className="flex text-sm italic">
+          {isGlobal ? (
+            <div className="self-center not-italic mr-1">🌎</div>
+          ) : countryCode ? (
+            <div className="self-center mr-1">
+              <ReactCountryFlag
+                countryCode={countryCode}
+                svg
+                style={{
+                  width: "1.5em",
+                  height: "1.5em",
+                }}
+              />
+            </div>
+          ) : null}
+          <div className="self-center">{isGlobal ? "Global" : country}</div>
+        </div>
         {eventType === "Fixed Session" ? (
           <h5 className="text-sm italic">
             {start ? formattedDate : "Date TBA"}

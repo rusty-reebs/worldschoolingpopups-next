@@ -56,7 +56,7 @@ export default function Nav() {
         >
           🗺&nbsp;&nbsp;Map
         </Link>
-        <Link
+        {/* <Link
           // href="/events/search"
           href="#"
           className="block lg:inline-block text-lightblue hover:text-white px-3 py-3 border-b-2 border-lightblue lg:border-none lg:text-lg"
@@ -66,7 +66,7 @@ export default function Nav() {
             <i className="fas fa-star text-yellow"></i>&nbsp;Coming Soon!&nbsp;
             <i className="fas fa-star text-yellow"></i>
           </p>
-        </Link>
+        </Link> */}
         <Link
           href="/admin"
           className="block lg:inline-block text-lightblue hover:text-white px-3 py-3 border-b-2 border-lightblue lg:border-none lg:text-lg"

@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { supabaseAdmin } from "../supabase";
 import { useRouter } from "next/router";
 import { CloudinaryUploadWidget } from "../_helpers/cloudinary";
+const lookup = require("country-code-lookup");
 
 export default function EventForm({ isNew, id }) {
   const initialValues = {
@@ -37,7 +38,12 @@ export default function EventForm({ isNew, id }) {
         .eq("id", id)
         .single();
       console.log("👉 data", data);
-      setForm(data);
+      if (data.country) {
+        const info = lookup.byCountry(data.country);
+        setForm({ ...data, countryCode: info.iso2 });
+      } else {
+        setForm(data);
+      }
       setImages(data.images);
       setIsLoading(false);
     } catch (err) {
@@ -56,8 +62,14 @@ export default function EventForm({ isNew, id }) {
     setErrorMessage("");
     try {
       if (isNew) {
+        let countryCode = null;
+        if (form.country) {
+          const info = lookup.byCountry(form.country);
+          countryCode = info.iso2;
+        }
         const { error } = await supabaseAdmin.from("testEvents").insert({
           ...form,
+          countryCode: countryCode,
           images: images,
         });
         if (error) {
@@ -224,12 +236,13 @@ export default function EventForm({ isNew, id }) {
               ]}
               selectedValue={"Fixed Session"}
               value={form?.eventType}
-              callback={(value) =>
+              callback={(value) => {
+                console.log("👉 value", value);
                 setForm((prev) => ({
                   ...prev,
                   eventType: value,
-                }))
-              }
+                }));
+              }}
             />
             <div className="flex gap-2">
               <Input

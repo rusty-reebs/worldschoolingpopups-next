@@ -15,6 +15,83 @@ import EmbeddedMap from "@/components/components/EmbeddedMap";
 //TODO image loading
 //! getStaticPaths not working?
 
+export async function getStaticPaths() {
+  try {
+    const { data } = await supabaseAdmin.from("testEvents").select("id");
+    const paths = data.map((event) => ({
+      params: {
+        event: `${event.id}`,
+      },
+    }));
+    return {
+      paths,
+      fallback: "blocking",
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// export async function getServerSideProps({ params }) {
+//   try {
+//     const { data: eventData } = await supabaseAdmin
+//       .from("testEvents")
+//       .select("*")
+//       .eq("id", params.event);
+
+//     const [eventObj] = eventData;
+
+//     const transformedImages = transformImages(eventObj.images);
+//     let newImageUrls = [];
+//     if (transformedImages.length > 1) {
+//       newImageUrls = transformedImages.map((image) => {
+//         return image.toURL();
+//       });
+//     } else {
+//       newImageUrls = [transformedImages.toURL()];
+//     }
+
+//     return {
+//       props: {
+//         eventData: eventObj,
+//         newImageUrls,
+//       },
+//     };
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+
+export async function getStaticProps({ params }) {
+  try {
+    const { data: eventData } = await supabaseAdmin
+      .from("testEvents")
+      .select("*")
+      .eq("id", params.event);
+
+    const [eventObj] = eventData;
+
+    const transformedImages = transformImages(eventObj.images);
+    let newImageUrls = [];
+    if (transformedImages.length > 1) {
+      newImageUrls = transformedImages.map((image) => {
+        return image.toURL();
+      });
+    } else {
+      newImageUrls = [transformedImages.toURL()];
+    }
+
+    return {
+      props: {
+        eventData: eventObj,
+        newImageUrls,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export default function Detail({ eventData, newImageUrls }) {
   const today = new Date();
   let startDate = new Date(eventData.start);
@@ -160,81 +237,4 @@ export default function Detail({ eventData, newImageUrls }) {
       </div>
     </>
   );
-}
-
-export async function getStaticPaths() {
-  try {
-    const { data } = await supabaseAdmin.from("testEvents").select("id");
-    const paths = data.map((event) => ({
-      params: {
-        event: `${event.id}`,
-      },
-    }));
-    return {
-      paths,
-      fallback: "blocking",
-    };
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-// export async function getServerSideProps({ params }) {
-//   try {
-//     const { data: eventData } = await supabaseAdmin
-//       .from("testEvents")
-//       .select("*")
-//       .eq("id", params.event);
-
-//     const [eventObj] = eventData;
-
-//     const transformedImages = transformImages(eventObj.images);
-//     let newImageUrls = [];
-//     if (transformedImages.length > 1) {
-//       newImageUrls = transformedImages.map((image) => {
-//         return image.toURL();
-//       });
-//     } else {
-//       newImageUrls = [transformedImages.toURL()];
-//     }
-
-//     return {
-//       props: {
-//         eventData: eventObj,
-//         newImageUrls,
-//       },
-//     };
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-export async function getStaticProps({ params }) {
-  try {
-    const { data: eventData } = await supabaseAdmin
-      .from("testEvents")
-      .select("*")
-      .eq("id", params.event);
-
-    const [eventObj] = eventData;
-
-    const transformedImages = transformImages(eventObj.images);
-    let newImageUrls = [];
-    if (transformedImages.length > 1) {
-      newImageUrls = transformedImages.map((image) => {
-        return image.toURL();
-      });
-    } else {
-      newImageUrls = [transformedImages.toURL()];
-    }
-
-    return {
-      props: {
-        eventData: eventObj,
-        newImageUrls,
-      },
-    };
-  } catch (err) {
-    console.log(err);
-  }
 }
