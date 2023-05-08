@@ -239,10 +239,10 @@ export default function Admin() {
               <button
                 className="bg-darkblue text-white py-1 px-3 border rounded-lg"
                 // onClick={() => handleLogout()}
-                onClick={() => handleTest()}
+                // onClick={() => handleTest()}
               >
-                {/* Logout */}
-                TEST
+                Logout
+                {/* TEST */}
               </button>
             </div>
           </div>

@@ -11,6 +11,7 @@ import { FaGlobe } from "react-icons/fa";
 import { supabaseAdmin } from "../../supabase";
 import Image from "next/image";
 import EmbeddedMap from "@/components/components/EmbeddedMap";
+import DetailTextBlock from "@/components/components/DetailTextBlock";
 
 //TODO image loading
 //! getStaticPaths not working?
@@ -138,11 +139,13 @@ export default function Detail({ eventData, newImageUrls }) {
           <div className="mx-5 py-3  text-white">
             <div className="flex lg:flex-row lg:gap-x-2">
               <h2 className="text-2xl">{eventData.name}</h2>
-              {today > new Date(eventData.end) && eventData.end !== null && (
-                <div className="flex bg-red absolute font-bold top-3 right-0 text-white text-sm m-3 p-3 rounded-md lg:relative lg:top-0 lg:p-0 lg:m-0 lg:place-items-center">
-                  <p className="lg:mx-2">COMPLETED</p>
-                </div>
-              )}
+              <DetailTextBlock
+                isArchived={eventData.isArchived}
+                isUnavailable={eventData.isUnavailable}
+                isCompleted={
+                  today > new Date(eventData.end) && eventData.start !== null
+                }
+              />
             </div>
             <p>
               <FaMapMarkerAlt className="inline text-white" />

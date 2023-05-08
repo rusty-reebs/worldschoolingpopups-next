@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import TextBlock from "./TextBlock";
+import CardTextBlock from "./CardTextBlock";
 import ReactCountryFlag from "react-country-flag";
 
 export default function Card({
@@ -46,13 +46,11 @@ export default function Card({
             priority
             onLoadingComplete={() => setIsLoading(false)}
           />
-          {isArchived ? (
-            <TextBlock isArchived />
-          ) : isUnavailable ? (
-            <TextBlock isUnavailable />
-          ) : today > endDate && start != null ? (
-            <TextBlock isCompleted />
-          ) : null}
+          <CardTextBlock
+            isArchived={isArchived}
+            isUnavailable={isUnavailable}
+            isCompleted={today > new Date(end) && start !== null}
+          />
         </div>
       </div>
       <h4 className="text-lg">{name}</h4>
