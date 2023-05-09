@@ -30,6 +30,10 @@ export default function EventForm({ isNew, id }) {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (form.isMultipleLocations) setForm((prev) => ({...prev, city: ""}))
+  // },[form.isMultipleLocations])
+
   const getEvent = async () => {
     try {
       const { data } = await supabaseAdmin
@@ -127,7 +131,7 @@ export default function EventForm({ isNew, id }) {
                 setForm((prev) => ({ ...prev, name: e.target.value }))
               }
             />
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <CountryInput
                 name="country"
                 label="Country"
@@ -143,7 +147,7 @@ export default function EventForm({ isNew, id }) {
               <div className="flex items-center mx-auto">
                 <label
                   htmlFor="global"
-                  className="flex gap-3 text-sm font-light placeholder-black"
+                  className="flex gap-2 text-sm font-light placeholder-black"
                 >
                   Global?
                   <input
@@ -151,12 +155,34 @@ export default function EventForm({ isNew, id }) {
                     type="checkbox"
                     className="scale-150"
                     checked={form?.isGlobal}
-                    onChange={(value) =>
+                    onChange={(e) => {
+                      if (e.currentTarget.checked)
+                        setForm((prev) => ({ ...prev, country: "" }));
                       setForm((prev) => ({
                         ...prev,
                         isGlobal: !prev?.isGlobal,
-                      }))
-                    }
+                      }));
+                    }}
+                  />
+                </label>
+              </div>
+              <div className="flex items-center mx-auto">
+                <label
+                  htmlFor="online"
+                  className="flex gap-2 text-sm font-light placeholder-black"
+                >
+                  Online?
+                  <input
+                    name="online"
+                    type="checkbox"
+                    className="scale-150"
+                    checked={form?.isOnline}
+                    onChange={(e) => {
+                      setForm((prev) => ({
+                        ...prev,
+                        isOnline: !prev?.isOnline,
+                      }));
+                    }}
                   />
                 </label>
               </div>
@@ -187,12 +213,14 @@ export default function EventForm({ isNew, id }) {
                     type="checkbox"
                     className="scale-150"
                     checked={form?.isMultipleLocations}
-                    onChange={(value) =>
+                    onChange={(e) => {
+                      if (e.currentTarget.checked)
+                        setForm((prev) => ({ ...prev, city: "" }));
                       setForm((prev) => ({
                         ...prev,
                         isMultipleLocations: !prev?.isMultipleLocations,
-                      }))
-                    }
+                      }));
+                    }}
                   />
                 </label>
               </div>

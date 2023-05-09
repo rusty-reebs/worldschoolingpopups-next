@@ -10,10 +10,10 @@ import { supabaseAdmin } from "@/components/supabase";
 import { useEffect, useState } from "react";
 
 // TODO About component in react-modern-drawer?
-// TODO Image placeholders blur on [event].js
 // TODO production / dev environments
 // TODO fix EventType save on new (not saving default?)
 // TODO fade div on state change
+// TODO admin auth
 // * green comments
 
 export async function getStaticProps() {
@@ -48,11 +48,19 @@ export async function getStaticProps() {
 export default function Events({ events, lastUpdated }) {
   const [filter, setFilter] = useState("Current");
   const [filteredEvents, setFilteredEvents] = useState(events);
-  const [loaded, setLoaded] = useState(false);
   const today = new Date();
   const filters = ["All", "Current", "Completed", "Archived", "Unavailable"];
 
   useEffect(() => {
+    setTimeout(() => {
+      document.getElementById("fade-div").classList.remove("opacity-0");
+      document.getElementById("fade-div").classList.add("opacity-100");
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    // document.getElementById("fade-div").classList.remove("opacity-100");
+    // document.getElementById("fade-div").classList.add("opacity-0");
     if (filter === "All") setFilteredEvents(events);
     if (filter === "Archived")
       setFilteredEvents(events.filter((event) => event.isArchived));
@@ -70,6 +78,10 @@ export default function Events({ events, lastUpdated }) {
           today > new Date(event.end) && event.end !== null ? event : null
         )
       );
+    // setTimeout(() => {
+    //   document.getElementById("fade-div").classList.remove("opacity-0");
+    //   document.getElementById("fade-div").classList.add("opacity-100");
+    // }, 200);
   }, [filter]);
 
   return (
@@ -86,7 +98,23 @@ export default function Events({ events, lastUpdated }) {
                     ? "bg-darkblue/90 text-white hover:border-none hover:m-0"
                     : "bg-lightblue"
                 }`}
-                onClick={() => setFilter(fltr)}
+                onClick={() => {
+                  document
+                    .getElementById("fade-div")
+                    .classList.remove("opacity-100");
+                  document
+                    .getElementById("fade-div")
+                    .classList.add("opacity-0");
+                  setFilter(fltr);
+                  setTimeout(() => {
+                    document
+                      .getElementById("fade-div")
+                      .classList.remove("opacity-0");
+                    document
+                      .getElementById("fade-div")
+                      .classList.add("opacity-100");
+                  }, 200);
+                }}
               >
                 {fltr}
               </div>
@@ -110,7 +138,8 @@ export default function Events({ events, lastUpdated }) {
           </div>
         </div>
         <div
-          className={`grid grid-cols-1 gap-y-6 mb-2 md:grid md:grid-cols-2 md:auto-rows-max md:gap-x-10 lg:grid lg:grid-cols-3 lg:auto-rows-max lg:gap-x-12 lg:gap-y-16 2xl:grid-cols-4`}
+          id="fade-div"
+          className={`transition-all duration-150 ease-out opacity-0 grid grid-cols-1 gap-y-6 mb-2 md:grid md:grid-cols-2 md:auto-rows-max md:gap-x-10 lg:grid lg:grid-cols-3 lg:auto-rows-max lg:gap-x-12 lg:gap-y-16 2xl:grid-cols-4`}
         >
           {filteredEvents?.map((event) => (
             <div key={event.id} className="last:pb-20">
@@ -125,38 +154,6 @@ export default function Events({ events, lastUpdated }) {
             </div>
           ))}
         </div>
-        {/* <div className="flex flex-col">
-          <div className="flex mx-auto mb-10 text-lg lg:text-2xl">
-            Events - Completed{" "}
-            <Badge
-              number={
-                events.filter((event) =>
-                  today > new Date(event.end) && event.end !== null
-                    ? event
-                    : null
-                ).length
-              }
-            />
-          </div>
-          <div className="grid grid-cols-1 gap-y-6 mb-2 md:grid md:grid-cols-2 md:auto-rows-max md:gap-x-10 lg:grid lg:grid-cols-3 lg:auto-rows-max lg:gap-x-12 lg:gap-y-16 2xl:grid-cols-4">
-            {events?.map((event) => {
-              if (today > new Date(event.end) && event.end !== null) {
-                return (
-                  <div key={event.id} className="last:pb-20">
-                    <Link
-                      href={{
-                        pathname: "/events/[event]",
-                        query: { event: event.id },
-                      }}
-                    >
-                      <Card key={event.id} event={event} />
-                    </Link>
-                  </div>
-                );
-              }
-            })}
-          </div>
-        </div> */}
         <Link
           href="/events/map"
           className="fixed inset-x-0 bottom-8 z-10 text-center lg:text-lg"

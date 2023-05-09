@@ -12,8 +12,8 @@ import { supabaseAdmin } from "../../supabase";
 import Image from "next/image";
 import EmbeddedMap from "@/components/components/EmbeddedMap";
 import DetailTextBlock from "@/components/components/DetailTextBlock";
+import { useState } from "react";
 
-//TODO image loading
 //! getStaticPaths not working?
 
 export async function getStaticPaths() {
@@ -94,6 +94,8 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Detail({ eventData, newImageUrls }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   const today = new Date();
   let startDate = new Date(eventData.start);
   let endDate = new Date(eventData.end);
@@ -125,10 +127,17 @@ export default function Detail({ eventData, newImageUrls }) {
             <div key={index} className="relative aspect-4/3 lg:h-72">
               <Image
                 src={image}
-                className="rounded-md"
+                className={`rounded-md 
+                ${
+                  isLoading
+                    ? "grayscale blur-2xl scale-110"
+                    : "grayscale-0 blur-0 scale-100"
+                }`}
                 alt={"eventimage" + index}
                 fill
+                priority
                 style={{ objectFit: "fill" }}
+                onLoadingComplete={() => setIsLoading(false)}
               />
             </div>
           );
@@ -147,10 +156,20 @@ export default function Detail({ eventData, newImageUrls }) {
                 }
               />
             </div>
-            <p>
+            <p className="flex items-center">
               <FaMapMarkerAlt className="inline text-white" />
               &nbsp;&nbsp;
-              {eventData.city}, {eventData.country}
+              {eventData.city
+                ? eventData.city
+                : eventData.isMultipleLocations && "Multiple Locations"}
+              {eventData.country
+                ? `, ${eventData.country}`
+                : eventData.isGlobal && "Global"}
+              {eventData.isOnline && (
+                <div className="flex bg-emerald-500 font-bold text-sm ml-2 py-0.5 px-2 rounded-full">
+                  ONLINE
+                </div>
+              )}
             </p>
             <p>
               <FaCalendar className="inline text-white" />

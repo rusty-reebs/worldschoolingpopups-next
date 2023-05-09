@@ -15,6 +15,7 @@ export default function Card({
     eventType,
     isArchived,
     isUnavailable,
+    isOnline,
   },
 }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +56,7 @@ export default function Card({
       </div>
       <h4 className="text-lg">{name}</h4>
       <div className="flex justify-between">
-        <div className="flex text-sm italic">
+        <div className="flex text-md italic">
           {isGlobal ? (
             <div className="self-center not-italic mr-1">🌎</div>
           ) : countryCode ? (
@@ -72,12 +73,17 @@ export default function Card({
           ) : null}
           <div className="self-center">{isGlobal ? "Global" : country}</div>
         </div>
+        {isOnline && (
+          <div className="flex bg-emerald-500 text-white not-italic font-bold text-xs ml-2 py-0.5 px-2 rounded-full place-items-center">
+            ONLINE
+          </div>
+        )}
         {eventType === "Fixed Session" ? (
-          <h5 className="text-sm italic">
+          <h5 className="text-md italic">
             {start ? formattedDate : "Date TBA"}
           </h5>
         ) : (
-          <h5 className="text-sm italic">{eventType}</h5>
+          <h5 className="text-md italic">{eventType}</h5>
         )}
       </div>
     </div>
