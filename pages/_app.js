@@ -10,7 +10,8 @@ import { supabaseBrowserClient } from "../lib/supabaseBrowserClient";
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }) {
-  const [supabaseClient] = useState(() => supabaseBrowserClient);
+  // const [supabaseClient] = useState(() => supabaseBrowserClient);
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   return (
     <main
       className={`${merriweatherSans.className} bg-yellow text-black min-h-screen w-full`}
