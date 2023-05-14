@@ -11,7 +11,12 @@ const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }) {
   // const [supabaseClient] = useState(() => supabaseBrowserClient);
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  const [supabaseClient] = useState(() =>
+    createBrowserSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
+  );
   return (
     <main
       className={`${merriweatherSans.className} bg-yellow text-black min-h-screen w-full`}
