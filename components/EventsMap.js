@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Map from "./Map";
 import Nav from "./Nav";
-import { supabaseAdmin } from "../supabase";
+import { supabaseClient } from "../lib/supabaseClient";
 
 export default function EventsMap() {
   const [eventLocations, setEventLocations] = useState({});
@@ -18,7 +18,7 @@ export default function EventsMap() {
   useEffect(() => {
     try {
       const loadEvents = async () => {
-        const { data } = await supabaseAdmin
+        const { data } = await supabaseClient
           .from("testEvents")
           .select("name, id, lat, lon, end");
         setEventLocations(
