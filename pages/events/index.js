@@ -6,26 +6,30 @@ import { addData } from "../../_helpers/addData";
 import Link from "next/link";
 import Button from "@/components/components/Button";
 import Badge from "@/components/components/Badge";
-import { supabaseAdmin } from "@/components/supabase";
 import { useEffect, useState } from "react";
+import { useFilterContext } from "@/components/contexts/context";
+import { supabaseClient } from "@/components/lib/supabaseClient";
 
+// TODO reset supabase keys
 // TODO About component in react-modern-drawer?
-// TODO production / dev environments
+// TODO production / dev environments, including Cloudinary test
 // TODO fix EventType save on new (not saving default?)
 // TODO fade div on state change
 // TODO admin auth
+// TODO Map component with no lat/lon
+// TODO retain last scroll position
 // * green comments
 
 export async function getStaticProps() {
   try {
-    const { data: lastUpdatedArray } = await supabaseAdmin
+    const { data: lastUpdatedArray } = await supabaseClient
       .from("testEvents")
       .select("updated")
       .order("updated", { ascending: false })
       .limit(1);
     const [lastUpdatedObj] = lastUpdatedArray;
 
-    const { data } = await supabaseAdmin.from("testEvents").select("*");
+    const { data } = await supabaseClient.from("testEvents").select("*");
     // console.log("supabase data", data);
     // get url for transformed cover images
     const result = data.map((event) => {
@@ -46,10 +50,10 @@ export async function getStaticProps() {
 }
 
 export default function Events({ events, lastUpdated }) {
-  const [filter, setFilter] = useState("Current");
   const [filteredEvents, setFilteredEvents] = useState(events);
   const today = new Date();
   const filters = ["All", "Current", "Completed", "Archived", "Unavailable"];
+  const { filter, setFilter } = useFilterContext();
 
   useEffect(() => {
     setTimeout(() => {
@@ -59,8 +63,6 @@ export default function Events({ events, lastUpdated }) {
   }, []);
 
   useEffect(() => {
-    // document.getElementById("fade-div").classList.remove("opacity-100");
-    // document.getElementById("fade-div").classList.add("opacity-0");
     if (filter === "All") setFilteredEvents(events);
     if (filter === "Archived")
       setFilteredEvents(events.filter((event) => event.isArchived));
@@ -69,7 +71,11 @@ export default function Events({ events, lastUpdated }) {
     if (filter === "Current")
       setFilteredEvents(
         events.filter((event) =>
-          today > new Date(event.end) && event.end !== null ? null : event
+          event.isArchived ||
+          event.isUnavailable ||
+          (today > new Date(event.end) && event.end !== null)
+            ? null
+            : event
         )
       );
     if (filter === "Completed")
@@ -78,10 +84,6 @@ export default function Events({ events, lastUpdated }) {
           today > new Date(event.end) && event.end !== null ? event : null
         )
       );
-    // setTimeout(() => {
-    //   document.getElementById("fade-div").classList.remove("opacity-0");
-    //   document.getElementById("fade-div").classList.add("opacity-100");
-    // }, 200);
   }, [filter]);
 
   return (

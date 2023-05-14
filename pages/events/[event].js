@@ -8,17 +8,18 @@ import { FaAddressCard } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaGlobe } from "react-icons/fa";
-import { supabaseAdmin } from "../../supabase";
+// import { supabaseAdmin } from "../../supabase";
 import Image from "next/image";
 import EmbeddedMap from "@/components/components/EmbeddedMap";
 import DetailTextBlock from "@/components/components/DetailTextBlock";
 import { useState } from "react";
+import { supabaseClient } from "@/components/lib/supabaseClient";
 
 //! getStaticPaths not working?
 
 export async function getStaticPaths() {
   try {
-    const { data } = await supabaseAdmin.from("testEvents").select("id");
+    const { data } = await supabaseClient.from("testEvents").select("id");
     const paths = data.map((event) => ({
       params: {
         event: `${event.id}`,
@@ -35,7 +36,7 @@ export async function getStaticPaths() {
 
 // export async function getServerSideProps({ params }) {
 //   try {
-//     const { data: eventData } = await supabaseAdmin
+//     const { data: eventData } = await supabaseClient
 //       .from("testEvents")
 //       .select("*")
 //       .eq("id", params.event);
@@ -65,7 +66,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   try {
-    const { data: eventData } = await supabaseAdmin
+    const { data: eventData } = await supabaseClient
       .from("testEvents")
       .select("*")
       .eq("id", params.event);

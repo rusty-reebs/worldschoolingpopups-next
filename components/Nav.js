@@ -2,8 +2,11 @@ import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaBars, FaWindowClose } from "react-icons/fa";
+import { useUser } from "@supabase/auth-helpers-react";
 
 export default function Nav() {
+  const user = useUser();
+
   useEffect(() => {
     document.getElementById("hamburger").onclick = function toggleMenu() {
       const navToggle = document.getElementsByClassName("toggle");
@@ -67,12 +70,14 @@ export default function Nav() {
             <i className="fas fa-star text-yellow"></i>
           </p>
         </Link> */}
-        <Link
-          href="/admin"
-          className="block lg:inline-block text-lightblue hover:text-white px-3 py-3 border-b-2 border-lightblue lg:border-none lg:text-lg"
-        >
-          ⚙️&nbsp;&nbsp;Admin
-        </Link>
+        {user && (
+          <Link
+            href="/admin"
+            className="block lg:inline-block text-lightblue hover:text-white px-3 py-3 border-b-2 border-lightblue lg:border-none lg:text-lg"
+          >
+            ⚙️&nbsp;&nbsp;Admin
+          </Link>
+        )}
       </div>
     </nav>
   );

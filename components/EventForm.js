@@ -4,15 +4,23 @@ import Button from "./Button";
 import Nav from "./Nav";
 import Input, { CountryInput, SessionSelect, TextAreaInput } from "./Input";
 import { format } from "date-fns";
-import { supabaseAdmin } from "../supabase";
+// import { supabaseAdmin } from "../supabase";
 import { useRouter } from "next/router";
 import { CloudinaryUploadWidget } from "../_helpers/cloudinary";
+import { supabaseClient } from "../lib/supabaseClient";
 const lookup = require("country-code-lookup");
 
 export default function EventForm({ isNew, id }) {
   const initialValues = {
     name: "",
     city: "",
+    isGlobal: false,
+    isOnline: false,
+    isMultipleLocations: false,
+    description: "",
+    email: "",
+    fbPage: "",
+    website: "",
   };
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState(initialValues);
@@ -36,7 +44,7 @@ export default function EventForm({ isNew, id }) {
 
   const getEvent = async () => {
     try {
-      const { data } = await supabaseAdmin
+      const { data } = await supabaseClient
         .from("testEvents")
         .select("*")
         .eq("id", id)
@@ -71,7 +79,7 @@ export default function EventForm({ isNew, id }) {
           const info = lookup.byCountry(form.country);
           countryCode = info.iso2;
         }
-        const { error } = await supabaseAdmin.from("testEvents").insert({
+        const { error } = await supabaseClient.from("testEvents").insert({
           ...form,
           countryCode: countryCode,
           images: images,
@@ -83,7 +91,7 @@ export default function EventForm({ isNew, id }) {
           //TODO delete images
         }
       } else {
-        const { error } = await supabaseAdmin
+        const { error } = await supabaseClient
           .from("testEvents")
           .update({ ...form, updated: new Date().toISOString() })
           .eq("id", id);
