@@ -5,7 +5,6 @@ import { FilterProvider } from "../contexts/context";
 import { useState } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { supabaseBrowserClient } from "../lib/supabaseBrowserClient";
 
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 

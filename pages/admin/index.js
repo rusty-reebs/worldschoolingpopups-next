@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Nav from "@/components/components/Nav";
-// import { supabaseAdmin } from "@/components/supabase";
 import { useRouter } from "next/router";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { Auth } from "@supabase/auth-ui-react";

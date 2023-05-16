@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaHourglass } from "react-icons/fa";
 import Button from "./Button";
 import Nav from "./Nav";
 import Input, { CountryInput, SessionSelect, TextAreaInput } from "./Input";
 import { format } from "date-fns";
-// import { supabaseAdmin } from "../supabase";
 import { useRouter } from "next/router";
 import { CloudinaryUploadWidget } from "../_helpers/cloudinary";
-import { supabaseClient } from "../lib/supabaseClient";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 const lookup = require("country-code-lookup");
 
 export default function EventForm({ isNew, id }) {
+  const supabaseClient = useSupabaseClient();
+
   const initialValues = {
     name: "",
     city: "",
     isGlobal: false,
     isOnline: false,
     isMultipleLocations: false,
+    start: undefined,
+    end: undefined,
     description: "",
     email: "",
     fbPage: "",
@@ -27,6 +30,7 @@ export default function EventForm({ isNew, id }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [images, setImages] = useState([]);
   const [checkmark, setCheckmark] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const router = useRouter();
@@ -72,6 +76,13 @@ export default function EventForm({ isNew, id }) {
       }, 1000);
     }
     setErrorMessage("");
+    setIsUpdating(true);
+    // if (!form.start) {
+    //   setForm((prev) => ({ ...prev, start: undefined }));
+    // }
+    // if (!form.end) {
+    //   setForm((prev) => ({ ...prev, end: undefined }));
+    // }
     try {
       if (isNew) {
         let countryCode = null;
@@ -86,7 +97,11 @@ export default function EventForm({ isNew, id }) {
         });
         if (error) {
           console.log(error);
-          return setErrorMessage("Oh no! Something broke. 😪");
+          setIsUpdating(false);
+          setErrorMessage("Oh no! Something broke. 😪");
+          return setTimeout(() => {
+            setErrorMessage("");
+          }, 1000);
           //TODO more error handling here
           //TODO delete images
         }
@@ -97,10 +112,15 @@ export default function EventForm({ isNew, id }) {
           .eq("id", id);
         if (error) {
           console.log(error);
-          return setErrorMessage("Oh no! Something broke. 😪");
+          setIsUpdating(false);
+          setErrorMessage("Oh no! Something broke. 😪");
+          return setTimeout(() => {
+            setErrorMessage("");
+          }, 1000);
           //TODO more error handling here
         }
       }
+      setIsUpdating(false);
       setSuccess(true);
       setTimeout(() => {
         router.push("/admin");
@@ -267,10 +287,10 @@ export default function EventForm({ isNew, id }) {
               label="Event Type"
               values={[
                 ["Fixed Session", "Fixed Session"],
+                ["Multiple Sessions", "Multiple Sessions"],
                 ["Open-ended / Continuous", "Open-ended / Continuous"],
-                ["Full School Year", "Full School Year"],
+                ["Follows School Year", "Follows School Year"],
               ]}
-              selectedValue={"Fixed Session"}
               value={form?.eventType}
               callback={(value) => {
                 console.log("👉 value", value);
@@ -293,6 +313,11 @@ export default function EventForm({ isNew, id }) {
                     start: e.target.value,
                   }))
                 }
+                isDisabled={
+                  form?.eventType === "Multiple Sessions" ||
+                  form?.eventType === "Open-ended / Continuous" ||
+                  form?.eventType === "Follows School Year"
+                }
               />
               <Input
                 name="dateEnd"
@@ -305,6 +330,11 @@ export default function EventForm({ isNew, id }) {
                     ...prev,
                     end: e.target.value,
                   }))
+                }
+                isDisabled={
+                  form?.eventType === "Multiple Sessions" ||
+                  form?.eventType === "Open-ended / Continuous" ||
+                  form?.eventType === "Follows School Year"
                 }
               />
             </div>
@@ -423,15 +453,20 @@ export default function EventForm({ isNew, id }) {
                 {errorMessage}
               </div>
             )}
-            <div className="flex justify-center mt-5">
+            <div className="mt-5 w-full text-center relative">
               <Button
                 name="Submit"
                 type="submit"
-                disabled={errorMessage ? true : false}
+                disabled={errorMessage || isUpdating ? true : false}
               ></Button>
+              <div className="inline-block absolute ml-3 mt-2">
+                {isUpdating && (
+                  <FaHourglass className="animate-spin" size={16} />
+                )}
+              </div>
             </div>
             {success ? (
-              <p className="text-center">
+              <p className="text-center mt-2">
                 <FaCheckCircle
                   className="inline text-green"
                   style={{ verticalAlign: "middle" }}

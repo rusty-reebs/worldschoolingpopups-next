@@ -3,12 +3,9 @@ import Nav from "@/components/components/Nav";
 // import { exportArray } from "../../_helpers/exportArray";
 import { FaArchive, FaEdit, FaEye, FaHourglass, FaTrash } from "react-icons/fa";
 import { CgUnavailable } from "react-icons/cg";
-// import { supabaseAdmin } from "@/components/supabase";
 import { useRouter } from "next/router";
 import ReactCountryFlag from "react-country-flag";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { Auth } from "@supabase/auth-ui-react";
-import { customTheme } from "@/components/utilities/customTheme";
 
 // TODO isLoading and permission rendering need work
 
@@ -24,7 +21,6 @@ export default function Manage() {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const router = useRouter();
-  console.log("👉 user", user);
 
   useEffect(() => {
     if (!user) router.push("/admin");

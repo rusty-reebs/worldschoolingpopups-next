@@ -246,14 +246,16 @@ export default function Detail({ eventData, newImageUrls }) {
                 </div>
               </div>
             </div>
-            <div className="lg:order-2 lg:w-5/12">
-              <div className="border-b border-orange mb-2 py-2 lg:border-none lg:mb-0 h-96 lg:pl-4">
-                <EmbeddedMap lat={eventData.lat} lon={eventData.lon} />
+            {eventData.lat && eventData.lon && (
+              <div className="lg:order-2 lg:w-5/12">
+                <div className="border-b border-orange mb-2 py-2 lg:border-none lg:mb-0 h-96 lg:pl-4">
+                  <EmbeddedMap lat={eventData.lat} lon={eventData.lon} />
+                </div>
+                <p className="text-right text-xs italic">
+                  * Location may not be exact.
+                </p>
               </div>
-              <p className="text-right text-xs italic">
-                * Location may not be exact.
-              </p>
-            </div>
+            )}
           </div>
           <div className="h-4 lg:h-10"></div>
         </div>

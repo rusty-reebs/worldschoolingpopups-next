@@ -79,14 +79,7 @@ const TextAreaInput = ({ name, label, required, value, onChange }) => {
   );
 };
 
-const SessionSelect = ({
-  name,
-  label,
-  values,
-  selectedValue,
-  callback,
-  required,
-}) => {
+const SessionSelect = ({ name, label, values, callback, required }) => {
   return (
     <div className="bg-white border transition duration-150 ease-in-out focus-within:border-orange border-black rounded-md mb-2">
       <label
@@ -98,10 +91,14 @@ const SessionSelect = ({
       </label>
       <select
         id={name}
-        onChange={({ target: { value } }) => callback(value)}
-        defaultValue={selectedValue}
+        defaultValue={"notAValue"}
+        onChange={(e) => callback(e.currentTarget.value)}
         className="bg-white focus:outline-none mb-2 text-base font-light placeholder-black w-full px-1"
       >
+        <option disabled value={"notAValue"}>
+          {" "}
+          -- Select an option --
+        </option>
         {values.map(([value, text]) => (
           <option key={value} value={value}>
             {text}

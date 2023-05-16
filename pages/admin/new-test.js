@@ -1,10 +1,10 @@
 import EventForm from "@/components/components/EventForm";
-import { supabaseClient } from "@/components/lib/supabaseClient";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function NewTest() {
+  const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const user = useUser();
   const [myTest, setMyTest] = useState("");
@@ -15,8 +15,8 @@ export default function NewTest() {
   useEffect(() => {
     const myClaims = async () =>
       supabaseClient
-        .rpc("is_claims_admin", {})
-        // .rpc("get_claim", { uid: user.id, claim: "admin" })
+        // .rpc("is_claims_admin", {})
+        .rpc("get_claim", { uid: user?.id, claim: "admin" })
         .then((data) => console.log("👉 data", data.data));
     myClaims();
   }, [user]);
@@ -27,9 +27,9 @@ export default function NewTest() {
     // console.log("👉 data", data);
     // console.log("👉 error", error);
     // console.log("👉 myTest", myTest);
-    // const { data, error } = await supabaseClient
-    //   .from("testEvents")
-    //   .insert({ id: 100, name: myTest }, { returning: "minimal" });
+    const { data, error } = await supabaseClient
+      .from("testEvents")
+      .insert({ id: 100, name: myTest });
     if (error) {
       console.error(error);
       //TODO more error handling here

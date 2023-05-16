@@ -4,7 +4,7 @@ import Nav from "./Nav";
 import { supabaseClient } from "../lib/supabaseClient";
 
 export default function EventsMap() {
-  const [eventLocations, setEventLocations] = useState({});
+  const [eventLocations, setEventLocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const today = new Date();
@@ -21,13 +21,14 @@ export default function EventsMap() {
         const { data } = await supabaseClient
           .from("testEvents")
           .select("name, id, lat, lon, end");
-        setEventLocations(
-          data.map((event) => ({
+        const filtered = data
+          .filter((event) => event.lat && event.lon)
+          .map((event) => ({
             ...event,
             isCompleted:
               today > new Date(event.end) && event.end !== null ? true : false,
-          }))
-        );
+          }));
+        setEventLocations(filtered);
         setIsLoading(false);
       };
       loadEvents();
@@ -62,7 +63,9 @@ export default function EventsMap() {
         <Nav />
         <div className="lg:flex lg:justify-center lg:min-h-screen">
           <div className="lg:w-3/4">
-            <h3 className="text-base text-center mb-4 mx-3">Events - All</h3>
+            <h3 className="text-base lg:text-2xl text-center mb-4 mx-3">
+              Events - All
+            </h3>
             <div className="h-screen border border-orange lg:h-4/5">
               <Map
                 locations={eventLocations}

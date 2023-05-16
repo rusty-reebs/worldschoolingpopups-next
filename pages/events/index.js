@@ -13,10 +13,11 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO reset supabase keys
 // TODO About component in react-modern-drawer?
 // TODO production / dev environments, including Cloudinary test
-// TODO fix EventType save on new (not saving default?)
-// TODO fade div on state change
-// TODO admin auth
-// TODO Map component with no lat/lon
+// TODO ✅ fix EventType save on new (not saving default?)
+// TODO check mobile views
+// TODO ✅ fade div on state change
+// TODO ✅ admin auth
+// TODO ✅ Global Map component with no lat/lon
 // TODO retain last scroll position
 // * green comments
 
