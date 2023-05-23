@@ -5,7 +5,7 @@ import { focusOn } from "@cloudinary/url-gen/qualifiers/gravity";
 
 const CloudinaryUploadWidget = ({ setCheckmark, images, setImages }) => {
   useEffect(() => {
-    const myWidget = window.cloudinary.createUploadWidget(
+    const myWidget = window.cloudinary?.createUploadWidget(
       {
         cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
         uploadPreset: "mfwa5awq",

@@ -9,6 +9,8 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
 // TODO isLoading and permission rendering need work
 
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
+
 export default function Manage() {
   const [permission, setPermission] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +28,7 @@ export default function Manage() {
     if (!user) router.push("/admin");
   }, [user]);
 
+  // TODO use custom claims here, get the admin key instead
   useEffect(() => {
     const getPermission = async () => {
       try {
@@ -47,7 +50,7 @@ export default function Manage() {
     const getEvents = async () => {
       try {
         const { data } = await supabaseClient
-          .from("testEvents")
+          .from(tableName)
           .select(
             "id, name, end, isArchived, isUnavailable, isGlobal, country, countryCode, images"
           )
@@ -110,7 +113,7 @@ export default function Manage() {
     }
     try {
       const { error } = await supabaseClient
-        .from("testEvents")
+        .from(tableName)
         .update({ isUnavailable: currentStatus.isUnavailable ? false : true })
         .eq("id", id);
       if (!error) {
@@ -141,7 +144,7 @@ export default function Manage() {
     }
     try {
       const { error } = await supabaseClient
-        .from("testEvents")
+        .from(tableName)
         .update({ isArchived: currentStatus.isArchived ? false : true })
         .eq("id", id);
       if (!error) {
@@ -191,7 +194,7 @@ export default function Manage() {
       } else {
         try {
           const { error } = await supabaseClient
-            .from("testEvents")
+            .from(tableName)
             .delete()
             .eq("id", id);
           supabaseError = error;

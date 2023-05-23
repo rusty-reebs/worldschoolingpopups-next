@@ -21,16 +21,18 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO retain last scroll position
 // * green comments
 
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
+
 export async function getStaticProps() {
   try {
     const { data: lastUpdatedArray } = await supabaseClient
-      .from("testEvents")
+      .from(tableName)
       .select("updated")
       .order("updated", { ascending: false })
       .limit(1);
     const [lastUpdatedObj] = lastUpdatedArray;
 
-    const { data } = await supabaseClient.from("testEvents").select("*");
+    const { data } = await supabaseClient.from(tableName).select("*");
     // console.log("supabase data", data);
     // get url for transformed cover images
     const result = data.map((event) => {

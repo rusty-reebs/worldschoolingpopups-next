@@ -9,6 +9,8 @@ import { CloudinaryUploadWidget } from "../_helpers/cloudinary";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 const lookup = require("country-code-lookup");
 
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
+
 export default function EventForm({ isNew, id }) {
   const supabaseClient = useSupabaseClient();
 
@@ -18,8 +20,10 @@ export default function EventForm({ isNew, id }) {
     isGlobal: false,
     isOnline: false,
     isMultipleLocations: false,
-    start: undefined,
-    end: undefined,
+    start: "",
+    end: "",
+    lat: "",
+    lon: "",
     description: "",
     email: "",
     fbPage: "",
@@ -42,14 +46,10 @@ export default function EventForm({ isNew, id }) {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (form.isMultipleLocations) setForm((prev) => ({...prev, city: ""}))
-  // },[form.isMultipleLocations])
-
   const getEvent = async () => {
     try {
       const { data } = await supabaseClient
-        .from("testEvents")
+        .from(tableName)
         .select("*")
         .eq("id", id)
         .single();
@@ -77,12 +77,6 @@ export default function EventForm({ isNew, id }) {
     }
     setErrorMessage("");
     setIsUpdating(true);
-    // if (!form.start) {
-    //   setForm((prev) => ({ ...prev, start: undefined }));
-    // }
-    // if (!form.end) {
-    //   setForm((prev) => ({ ...prev, end: undefined }));
-    // }
     try {
       if (isNew) {
         let countryCode = null;
@@ -90,10 +84,17 @@ export default function EventForm({ isNew, id }) {
           const info = lookup.byCountry(form.country);
           countryCode = info.iso2;
         }
-        const { error } = await supabaseClient.from("testEvents").insert({
+        const eventData = {
           ...form,
           countryCode: countryCode,
           images: images,
+          start: form.start === "" ? null : new Date(form.start),
+          end: form.end === "" ? null : new Date(form.end),
+          lat: form.lat === "" ? null : form.lat,
+          lon: form.lon === "" ? null : form.lon,
+        };
+        const { error } = await supabaseClient.from(tableName).insert({
+          ...eventData,
         });
         if (error) {
           console.log(error);
@@ -107,7 +108,7 @@ export default function EventForm({ isNew, id }) {
         }
       } else {
         const { error } = await supabaseClient
-          .from("testEvents")
+          .from(tableName)
           .update({ ...form, updated: new Date().toISOString() })
           .eq("id", id);
         if (error) {
@@ -147,6 +148,7 @@ export default function EventForm({ isNew, id }) {
           <form
             onSubmit={handleSubmit}
             className={isLoading ? "animate-pulse blur-sm" : ""}
+            autoComplete="false"
           >
             <Input
               name="eventName"
@@ -185,11 +187,11 @@ export default function EventForm({ isNew, id }) {
                     checked={form?.isGlobal}
                     onChange={(e) => {
                       if (e.currentTarget.checked)
-                        setForm((prev) => ({ ...prev, country: "" }));
-                      setForm((prev) => ({
-                        ...prev,
-                        isGlobal: !prev?.isGlobal,
-                      }));
+                        setForm((prev) => ({
+                          ...prev,
+                          country: "",
+                          isGlobal: !prev?.isGlobal,
+                        }));
                     }}
                   />
                 </label>
@@ -243,11 +245,11 @@ export default function EventForm({ isNew, id }) {
                     checked={form?.isMultipleLocations}
                     onChange={(e) => {
                       if (e.currentTarget.checked)
-                        setForm((prev) => ({ ...prev, city: "" }));
-                      setForm((prev) => ({
-                        ...prev,
-                        isMultipleLocations: !prev?.isMultipleLocations,
-                      }));
+                        setForm((prev) => ({
+                          ...prev,
+                          city: "",
+                          isMultipleLocations: !prev?.isMultipleLocations,
+                        }));
                     }}
                   />
                 </label>
@@ -293,7 +295,6 @@ export default function EventForm({ isNew, id }) {
               ]}
               value={form?.eventType}
               callback={(value) => {
-                console.log("👉 value", value);
                 setForm((prev) => ({
                   ...prev,
                   eventType: value,
