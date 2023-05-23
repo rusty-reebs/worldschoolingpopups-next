@@ -237,9 +237,9 @@ export default function Manage() {
           You don&apos;t have permission to view this page. 😪
         </div>
       ) : (
-        <div className="flex flex-col w-1/2 mx-auto">
-          <div className="text-xl py-8 mx-auto">Manage Listings</div>
-          <div className="flex pb-8">
+        <div className="flex flex-col lg:w-1/2 mx-auto">
+          <div className="text-xl py-4 lg:py-8 mx-auto">Manage Listings</div>
+          <div className="flex flex-col gap-4 lg:flex-row lg:gap-0 pb-8">
             <div className="self-center">
               <input
                 type="text"
@@ -249,7 +249,7 @@ export default function Manage() {
                 onChange={handleSearch}
               />
             </div>
-            <div className="ml-auto mr-11">
+            <div className="mx-auto lg:mx-0 lg:ml-auto lg:mr-11">
               <button
                 className="bg-darkblue text-white py-1 px-3 border rounded-lg mr-4"
                 onClick={() => router.push("/admin/new")}
@@ -270,7 +270,7 @@ export default function Manage() {
               </button>
             </div>
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col ml-4 lg:ml-0 gap-5">
             {events?.map((event) => (
               <div key={event.id} className="flex flex-col gap-2 last:pb-20">
                 <div className="flex w-full">
@@ -303,7 +303,7 @@ export default function Manage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex gap-4 items-center">
+                    <div className="flex flex-col lg:flex-row gap-4 items-center">
                       {event.isArchived && (
                         <div className="py-0.5 px-1.5 bg-indigo-500 text-white self-center h-fit text-xs font-medium rounded-xl">
                           Archived

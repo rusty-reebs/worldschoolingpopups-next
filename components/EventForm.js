@@ -53,7 +53,6 @@ export default function EventForm({ isNew, id }) {
         .select("*")
         .eq("id", id)
         .single();
-      console.log("👉 data", data);
       if (data.country) {
         const info = lookup.byCountry(data.country);
         setForm({ ...data, countryCode: info.iso2 });

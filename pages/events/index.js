@@ -14,7 +14,7 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO About component in react-modern-drawer?
 // TODO production / dev environments, including Cloudinary test
 // TODO ✅ fix EventType save on new (not saving default?)
-// TODO check mobile views
+// TODO ✅ check mobile views
 // TODO ✅ fade div on state change
 // TODO ✅ admin auth
 // TODO ✅ Global Map component with no lat/lon
@@ -93,8 +93,8 @@ export default function Events({ events, lastUpdated }) {
     <>
       <Nav />
       <div className="flex flex-col mx-4 lg:flex lg:flex-col lg:justify-center lg:mx-10">
-        <div className="flex mb-10">
-          <div className="flex gap-2 text-sm place-items-center">
+        <div className="flex flex-col mb-6 lg:flex-row lg:mb-10">
+          <div className="flex gap-2 text-xs mb-4 lg:mb-0 lg:text-sm place-items-center">
             {filters.map((fltr) => (
               <div
                 key={fltr}
@@ -125,7 +125,7 @@ export default function Events({ events, lastUpdated }) {
               </div>
             ))}
           </div>
-          <div className="flex mx-auto text-lg lg:text-2xl">
+          <div className="flex text-lg justify-center lg:justify-normal lg:mx-auto lg:text-2xl">
             Events -{" "}
             {filter === "Current"
               ? "Current and Upcoming"
@@ -138,7 +138,7 @@ export default function Events({ events, lastUpdated }) {
               : "All"}{" "}
             <Badge number={filteredEvents.length} />
           </div>
-          <div className="flex items-center ml-auto italic text-sm lg:text-base">
+          <div className="flex justify-center lg:justify-normal items-center lg:ml-auto italic text-sm lg:text-base">
             Last updated: {format(new Date(lastUpdated), "MMM d, yyyy")}
           </div>
         </div>
