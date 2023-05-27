@@ -3,5 +3,6 @@
     "paths": {
       "@/components/*": ["./*"]
     }
-  }
+  },
+  "resolveJsonModule": true,
 }

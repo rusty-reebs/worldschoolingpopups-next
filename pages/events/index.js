@@ -13,6 +13,7 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO reset supabase keys
 // TODO About component in react-modern-drawer?
 // TODO production / dev environments, including Cloudinary test
+// TODO tablet size styling
 // TODO ✅ fix EventType save on new (not saving default?)
 // TODO ✅ check mobile views
 // TODO ✅ fade div on state change
@@ -28,7 +29,7 @@ export async function getStaticProps() {
     const { data: lastUpdatedArray } = await supabaseClient
       .from(tableName)
       .select("updated")
-      .order("updated", { ascending: false })
+      .order("updated", { ascending: false, nullsFirst: false })
       .limit(1);
     const [lastUpdatedObj] = lastUpdatedArray;
 
@@ -142,23 +143,29 @@ export default function Events({ events, lastUpdated }) {
             Last updated: {format(new Date(lastUpdated), "MMM d, yyyy")}
           </div>
         </div>
-        <div
-          id="fade-div"
-          className={`transition-all duration-150 ease-out opacity-0 grid grid-cols-1 gap-y-6 mb-2 md:grid md:grid-cols-2 md:auto-rows-max md:gap-x-10 lg:grid lg:grid-cols-3 lg:auto-rows-max lg:gap-x-12 lg:gap-y-16 2xl:grid-cols-4`}
-        >
-          {filteredEvents?.map((event) => (
-            <div key={event.id} className="last:pb-20">
-              <Link
-                href={{
-                  pathname: "/events/[event]",
-                  query: { event: event.id },
-                }}
-              >
-                <Card key={event.id} event={event} />
-              </Link>
-            </div>
-          ))}
-        </div>
+        {!filteredEvents.length ? (
+          <div id="fade-div" className="mx-auto mt-10">
+            No events meet this filter criteria.
+          </div>
+        ) : (
+          <div
+            id="fade-div"
+            className={`transition-all duration-150 ease-out opacity-0 grid grid-cols-1 gap-y-6 mb-2 md:grid md:grid-cols-2 md:auto-rows-max md:gap-x-10 lg:grid lg:grid-cols-3 lg:auto-rows-max lg:gap-x-12 lg:gap-y-16 2xl:grid-cols-4`}
+          >
+            {filteredEvents?.map((event) => (
+              <div key={event.id} className="last:pb-20">
+                <Link
+                  href={{
+                    pathname: "/events/[event]",
+                    query: { event: event.id },
+                  }}
+                >
+                  <Card key={event.id} event={event} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
         <Link
           href="/events/map"
           className="fixed inset-x-0 bottom-8 z-10 text-center lg:text-lg"

@@ -16,14 +16,18 @@ export default function EventForm({ isNew, id }) {
 
   const initialValues = {
     name: "",
+    country: "",
     city: "",
     isGlobal: false,
     isOnline: false,
     isMultipleLocations: false,
+    eventType: "",
     start: "",
     end: "",
     lat: "",
     lon: "",
+    min: "",
+    max: "",
     description: "",
     email: "",
     fbPage: "",
@@ -53,12 +57,18 @@ export default function EventForm({ isNew, id }) {
         .select("*")
         .eq("id", id)
         .single();
-      if (data.country) {
-        const info = lookup.byCountry(data.country);
-        setForm({ ...data, countryCode: info.iso2 });
-      } else {
-        setForm(data);
-      }
+      console.log("👉 data", data);
+      setForm({
+        ...data,
+        updated: data.updated ? new Date(data.updated).toISOString() : "",
+        country: data.country ? data.country : "",
+        eventType: data.eventType || "",
+        start: data.start || "",
+        end: data.end || "",
+        min: data.min || "",
+        max: data.max || "",
+      });
+      // }
       setImages(data.images);
       setIsLoading(false);
     } catch (err) {
@@ -91,6 +101,8 @@ export default function EventForm({ isNew, id }) {
           end: form.end === "" ? null : new Date(form.end),
           lat: form.lat === "" ? null : form.lat,
           lon: form.lon === "" ? null : form.lon,
+          min: form.min === "" ? null : form.min,
+          max: form.max === "" ? null : form.max,
         };
         const { error } = await supabaseClient.from(tableName).insert({
           ...eventData,
@@ -108,7 +120,14 @@ export default function EventForm({ isNew, id }) {
       } else {
         const { error } = await supabaseClient
           .from(tableName)
-          .update({ ...form, updated: new Date().toISOString() })
+          .update({
+            ...form,
+            updated: new Date().toISOString(),
+            start: form.start ? new Date(form.start) : null,
+            end: form.end ? new Date(form.end) : null,
+            min: form.min || null,
+            max: form.max || null,
+          })
           .eq("id", id);
         if (error) {
           console.log(error);
