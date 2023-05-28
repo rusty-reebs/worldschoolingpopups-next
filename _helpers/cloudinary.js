@@ -8,8 +8,7 @@ const CloudinaryUploadWidget = ({ setCheckmark, images, setImages }) => {
     const myWidget = window.cloudinary?.createUploadWidget(
       {
         cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
-        uploadPreset: "mfwa5awq",
-        folder: process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER,
+        uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
         sources: ["local", "url", "google_drive", "facebook", "instagram"],
         resourceType: "image",
         maxFileSize: 1000000,

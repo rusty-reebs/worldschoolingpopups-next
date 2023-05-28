@@ -166,7 +166,7 @@ export default function Detail({ eventData, newImageUrls }) {
                 : eventData.isMultipleLocations && "Multiple Locations"}
               {eventData.country
                 ? `, ${eventData.country}`
-                : eventData.isGlobal && "Global"}
+                : eventData.isGlobal && ", Global"}
               {eventData.isOnline && (
                 <div className="flex bg-emerald-500 font-bold text-sm ml-2 py-0.5 px-2 rounded-full">
                   ONLINE

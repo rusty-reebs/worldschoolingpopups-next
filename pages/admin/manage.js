@@ -114,7 +114,10 @@ export default function Manage() {
     try {
       const { error } = await supabaseClient
         .from(tableName)
-        .update({ isUnavailable: currentStatus.isUnavailable ? false : true })
+        .update({
+          isUnavailable: currentStatus.isUnavailable ? false : true,
+          updated: new Date().toISOString(),
+        })
         .eq("id", id);
       if (!error) {
         setEvents((prev) =>
@@ -145,7 +148,10 @@ export default function Manage() {
     try {
       const { error } = await supabaseClient
         .from(tableName)
-        .update({ isArchived: currentStatus.isArchived ? false : true })
+        .update({
+          isArchived: currentStatus.isArchived ? false : true,
+          updated: new Date().toISOString(),
+        })
         .eq("id", id);
       if (!error) {
         setEvents((prev) =>

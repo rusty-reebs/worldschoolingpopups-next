@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import { useFilterContext } from "@/components/contexts/context";
 import { supabaseClient } from "@/components/lib/supabaseClient";
 
-// TODO reset supabase keys
 // TODO About component in react-modern-drawer?
-// TODO production / dev environments, including Cloudinary test
+// TODO ✅ production / dev environments, including Cloudinary test
+// TODO clean Cloudinary media library
 // TODO tablet size styling
 // TODO ✅ default sorting on index page
 // TODO ✅ fix EventType save on new (not saving default?)
@@ -170,12 +170,12 @@ export default function Events({ events, lastUpdated }) {
             ))}
           </div>
         )}
-        <Link
+        {/* <Link
           href="/events/map"
           className="fixed inset-x-0 bottom-8 z-10 text-center lg:text-lg"
         >
           <Button name="Map" mapIcon="true" />
-        </Link>
+        </Link> */}
       </div>
     </>
   );
