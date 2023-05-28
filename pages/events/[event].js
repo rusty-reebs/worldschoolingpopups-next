@@ -21,7 +21,7 @@ const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 export async function getStaticPaths() {
   try {
     const { data } = await supabaseClient.from(tableName).select("id");
-    const paths = data.map((event) => ({
+    const paths = data?.map((event) => ({
       params: {
         event: `${event.id}`,
       },
