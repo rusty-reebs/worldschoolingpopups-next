@@ -3,6 +3,8 @@ import Map from "./Map";
 import Nav from "./Nav";
 import { supabaseClient } from "../lib/supabaseClient";
 
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
+
 export default function EventsMap() {
   const [eventLocations, setEventLocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +21,7 @@ export default function EventsMap() {
     try {
       const loadEvents = async () => {
         const { data } = await supabaseClient
-          .from("testEvents")
+          .from(tableName)
           .select("name, id, lat, lon, end");
         const filtered = data
           .filter((event) => event.lat && event.lon)
