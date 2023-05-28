@@ -2,7 +2,6 @@ import Nav from "../../components/Nav";
 import Card from "../../components/Card";
 import { transformImages } from "../../_helpers/cloudinary";
 import { format } from "date-fns";
-import { addData } from "../../_helpers/addData";
 import Link from "next/link";
 import Button from "@/components/components/Button";
 import Badge from "@/components/components/Badge";
@@ -14,6 +13,7 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO About component in react-modern-drawer?
 // TODO production / dev environments, including Cloudinary test
 // TODO tablet size styling
+// TODO ✅ default sorting on index page
 // TODO ✅ fix EventType save on new (not saving default?)
 // TODO ✅ check mobile views
 // TODO ✅ fade div on state change
@@ -33,7 +33,11 @@ export async function getStaticProps() {
       .limit(1);
     const [lastUpdatedObj] = lastUpdatedArray;
 
-    const { data } = await supabaseClient.from(tableName).select("*");
+    const { data } = await supabaseClient
+      .from(tableName)
+      .select("*")
+      .order("eventType", { ascending: true })
+      .order("start", { ascending: false });
     // console.log("supabase data", data);
     // get url for transformed cover images
     const result = data.map((event) => {
