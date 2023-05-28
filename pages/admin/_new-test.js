@@ -3,7 +3,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 // import data from "../../../../../../../Users/russell/Downloads/backup.json";
-import data from "../../backup-may27.json";
+// import data from "../../backup-may27.json";
 const lookup = require("country-code-lookup");
 
 export default function NewTest() {
@@ -39,6 +39,7 @@ export default function NewTest() {
     }
   };
 
+  const data = [];
   const transformData = async () => {
     // const firstTen = data.slice(0, 10);
     // console.log("👉 firstTen", firstTen);
