@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Nav from "@/components/components/Nav";
-// import { exportArray } from "../../_helpers/exportArray";
+import { exportArray } from "@/components/_helpers/exportArray";
 import { FaArchive, FaEdit, FaEye, FaHourglass, FaTrash } from "react-icons/fa";
 import { CgUnavailable } from "react-icons/cg";
 import { useRouter } from "next/router";
@@ -167,15 +167,6 @@ export default function Manage() {
     }
   };
 
-  const handleTest = async () => {
-    const strings = ["abcdef"];
-    const response = await fetch("/api/cloudinary-delete", {
-      method: "POST",
-      body: JSON.stringify(strings),
-    });
-    console.log("👉 response", response);
-  };
-
   const handleDelete = async (id, imagesArray) => {
     const public_ids = imagesArray.map((image) => image.cloudinary_id);
     setIsWorking(id);
@@ -213,6 +204,19 @@ export default function Manage() {
   const handleLogout = () => {
     supabaseClient.auth.signOut();
     router.push("/admin");
+  };
+
+  const handleExport = async () => {
+    try {
+      const { data } = await supabaseClient
+        .from(tableName)
+        .select("*")
+        .order("eventType", { ascending: false })
+        .order("start", { ascending: false });
+      exportArray("ws-export.json", data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -258,7 +262,7 @@ export default function Manage() {
               </button>
               <button
                 className="bg-darkblue text-white py-1 px-3 border rounded-lg mr-4"
-                // onClick={() => exportArray("ws-export.json", eventData)}
+                onClick={() => handleExport()}
               >
                 Backup Data
               </button>
