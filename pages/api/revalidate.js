@@ -1,9 +1,11 @@
 //* pagination notes
+//? will this work with tags like isCompleted (based on current date?)
 //* use vercel examples pagination-with-ssg
 //* needs to call await res.revalidate on /events, /events/2, /events/3 etc
 //? use Supabase edge function to get total records and pages, then call revalidate for each path
 //* count records and divide by per-page to get pages
 //* revalidate each page
+//* also needs to revalidate a specific event route after an update/edit
 
 export default async function handler(req, res) {
   // Check for secret to confirm this is a valid request

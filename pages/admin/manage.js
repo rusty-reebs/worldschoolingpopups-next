@@ -54,6 +54,7 @@ export default function Manage() {
           .select(
             "id, name, end, isArchived, isUnavailable, isGlobal, country, countryCode, images"
           )
+          .order("updated", { ascending: true })
           .order("eventType", { ascending: false })
           .order("start", { ascending: false });
         setMasterEvents(data);

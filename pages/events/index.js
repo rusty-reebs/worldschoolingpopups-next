@@ -12,6 +12,9 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO About component in react-modern-drawer?
 // TODO ✅ production / dev environments, including Cloudinary test
 // TODO clean Cloudinary media library
+// TODO ✅ update Full School Year to Follows School Year
+// TODO fix Card bottom line on small screens
+// TODO fix filter buttons spacing/alignment on small screens
 // TODO tablet size styling
 // TODO ✅ default sorting on index page
 // TODO ✅ fix EventType save on new (not saving default?)
@@ -26,12 +29,12 @@ const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 
 export async function getStaticProps() {
   try {
-    const { data: lastUpdatedArray } = await supabaseClient
+    const { data: lastUpdated } = await supabaseClient
       .from(tableName)
       .select("updated")
       .order("updated", { ascending: false, nullsFirst: false })
-      .limit(1);
-    const [lastUpdatedObj] = lastUpdatedArray;
+      .limit(1)
+      .single();
 
     const { data } = await supabaseClient
       .from(tableName)
@@ -48,9 +51,10 @@ export async function getStaticProps() {
     });
     return {
       props: {
-        lastUpdated: lastUpdatedObj.updated,
+        lastUpdated: lastUpdated.updated,
         events: result,
       },
+      revalidate: 60,
     };
   } catch (err) {
     console.log(err);
