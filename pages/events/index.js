@@ -10,12 +10,13 @@ import { useFilterContext } from "@/components/contexts/context";
 import { supabaseClient } from "@/components/lib/supabaseClient";
 
 // TODO About component in react-modern-drawer?
+// TODO pagination
 // TODO ✅ production / dev environments, including Cloudinary test
 // TODO clean Cloudinary media library
 // TODO ✅ update Full School Year to Follows School Year
 // TODO ✅ fix Card bottom line on small screens
 // TODO ✅ fix filter buttons spacing/alignment on small screens
-// TODO tablet size styling
+// TODO ✅ tablet size styling
 // TODO ✅ default sorting on index page
 // TODO ✅ fix EventType save on new (not saving default?)
 // TODO ✅ check mobile views
@@ -101,9 +102,9 @@ export default function Events({ events, lastUpdated }) {
   return (
     <>
       <Nav />
-      <div className="flex flex-col mx-3 md:mx-8 lg:flex lg:flex-col lg:justify-center lg:mx-10">
-        <div className="flex flex-col mb-6 lg:flex-row lg:mb-10">
-          <div className="flex gap-1 text-xs mb-4 md:place-self-center md:gap-3 lg:mb-0 lg:text-sm lg:gap-3 place-items-center">
+      <div className="flex flex-col mx-3 md:mx-8 lg:justify-center xl:mx-10">
+        <div className="flex flex-col mb-6 xl:flex-row xl:mb-10">
+          <div className="flex gap-1 text-xs mb-4 place-self-center md:gap-3 xl:mb-0 lg:text-sm place-items-center">
             {filters.map((fltr) => (
               <div
                 key={fltr}
@@ -147,7 +148,7 @@ export default function Events({ events, lastUpdated }) {
               : "All"}{" "}
             <Badge number={filteredEvents.length} />
           </div>
-          <div className="flex justify-center lg:justify-normal items-center lg:ml-auto italic text-sm lg:text-base">
+          <div className="flex justify-center xl:justify-normal items-center xl:ml-auto italic text-sm lg:text-base">
             Last updated: {format(new Date(lastUpdated), "MMM d, yyyy")}
           </div>
         </div>

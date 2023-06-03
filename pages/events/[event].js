@@ -117,16 +117,19 @@ export default function Detail({ eventData, newImageUrls }) {
 
   return (
     <>
-      <div className="hidden lg:block">
+      <div className="hidden md:block">
         <Nav />
       </div>
-      <div className="lg:hidden">
+      <div className="md:hidden">
         <CarouselComp images={eventData.images} />
       </div>
-      <div className="hidden lg:flex lg:justify-center lg:gap-4 lg:mb-6 lg:w-full">
+      <div className="hidden md:flex md:justify-center md:gap-4 md:mb-6 md:w-full">
         {newImageUrls.map((image, index) => {
           return (
-            <div key={index} className="relative aspect-4/3 lg:h-72">
+            <div
+              key={index}
+              className="relative aspect-4/3 md:h-44 lg:h-56 xl:h-72"
+            >
               <Image
                 src={image}
                 className={`rounded-md 
@@ -145,10 +148,10 @@ export default function Detail({ eventData, newImageUrls }) {
           );
         })}
       </div>
-      <div className="flex flex-col lg:mx-auto lg:w-10/12">
-        <div className="mb-2 bg-darkblue lg:rounded-md">
+      <div className="flex flex-col md:mx-auto md:w-11/12 xl:w-10/12">
+        <div className="mb-2 bg-darkblue md:rounded-md">
           <div className="mx-5 py-3  text-white">
-            <div className="flex lg:flex-row lg:gap-x-2">
+            <div className="flex md:flex-row md:gap-x-2">
               <h2 className="text-2xl">{eventData.name}</h2>
               <DetailTextBlock
                 isArchived={eventData.isArchived}
@@ -185,9 +188,9 @@ export default function Detail({ eventData, newImageUrls }) {
             </p>
           </div>
         </div>
-        <div className="mx-5">
-          <div className="lg:flex lg:flex-row lg:justify-between lg:gap-3">
-            <div className="lg:basis-3/5 lg:order-1">
+        <div className="mx-5 md:mx-0 lg:mx-5">
+          <div className="md:flex md:flex-row md:justify-between md:gap-3">
+            <div className="md:basis-3/5 lg:order-1">
               {eventData.min && eventData.max ? (
                 <div className="border-b border-orange py-4">
                   <p className="font-bold">
@@ -249,7 +252,7 @@ export default function Detail({ eventData, newImageUrls }) {
             </div>
             {eventData.lat && eventData.lon && (
               <div className="lg:order-2 lg:w-5/12">
-                <div className="border-b border-orange mb-2 py-2 lg:border-none lg:mb-0 h-96 lg:pl-4">
+                <div className="border-b border-orange mb-2 py-2 md:border-none lg:mb-0 h-96 lg:pl-4">
                   <EmbeddedMap lat={eventData.lat} lon={eventData.lon} />
                 </div>
                 <p className="text-right text-xs italic">

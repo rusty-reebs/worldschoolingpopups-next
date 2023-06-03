@@ -248,7 +248,7 @@ export default function Manage() {
           You don&apos;t have permission to view this page. 😪
         </div>
       ) : (
-        <div className="flex flex-col lg:w-1/2 mx-auto">
+        <div className="flex flex-col md:w-2/3 mx-auto">
           <div className="text-xl py-4 lg:py-8 mx-auto">Manage Listings</div>
           <div className="flex flex-col gap-4 lg:flex-row lg:gap-0 pb-8">
             <div className="self-center">

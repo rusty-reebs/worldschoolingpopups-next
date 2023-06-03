@@ -13,7 +13,7 @@ export default function DetailTextBlock({
           : isCompleted
           ? "bg-red text-white"
           : ""
-      } flex absolute top-3 right-0 font-bold text-sm m-3 p-3 rounded-full lg:relative lg:top-0 lg:py-1 lg:px-2 lg:m-0 lg:place-items-center`}
+      } flex absolute top-3 right-0 font-bold text-sm m-3 p-3 rounded-full md:relative md:top-0 md:py-1 md:px-2 md:m-0 md:place-items-center`}
     >
       {isArchived
         ? "ARCHIVED"
