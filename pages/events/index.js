@@ -13,8 +13,8 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 // TODO ✅ production / dev environments, including Cloudinary test
 // TODO clean Cloudinary media library
 // TODO ✅ update Full School Year to Follows School Year
-// TODO fix Card bottom line on small screens
-// TODO fix filter buttons spacing/alignment on small screens
+// TODO ✅ fix Card bottom line on small screens
+// TODO ✅ fix filter buttons spacing/alignment on small screens
 // TODO tablet size styling
 // TODO ✅ default sorting on index page
 // TODO ✅ fix EventType save on new (not saving default?)
@@ -101,9 +101,9 @@ export default function Events({ events, lastUpdated }) {
   return (
     <>
       <Nav />
-      <div className="flex flex-col mx-4 lg:flex lg:flex-col lg:justify-center lg:mx-10">
+      <div className="flex flex-col mx-3 md:mx-8 lg:flex lg:flex-col lg:justify-center lg:mx-10">
         <div className="flex flex-col mb-6 lg:flex-row lg:mb-10">
-          <div className="flex gap-2 text-xs mb-4 lg:mb-0 lg:text-sm place-items-center">
+          <div className="flex gap-1 text-xs mb-4 md:place-self-center md:gap-3 lg:mb-0 lg:text-sm lg:gap-3 place-items-center">
             {filters.map((fltr) => (
               <div
                 key={fltr}

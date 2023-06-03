@@ -55,7 +55,7 @@ export default function Card({
         </div>
       </div>
       <h4 className="text-lg">{name}</h4>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-wrap">
         <div className="flex text-md italic">
           {isGlobal ? (
             <div className="self-center not-italic mr-1">🌎</div>
@@ -74,16 +74,16 @@ export default function Card({
           <div className="self-center">{isGlobal ? "Global" : country}</div>
         </div>
         {isOnline && (
-          <div className="flex bg-emerald-500 text-white not-italic font-bold text-xs ml-2 py-0.5 px-2 rounded-full place-items-center">
+          <div className="flex grow-0 bg-emerald-500 text-white not-italic font-bold text-xs ml-2 py-0.5 px-2 rounded-full place-items-center">
             ONLINE
           </div>
         )}
         {eventType === "Fixed Session" ? (
-          <h5 className="text-md italic">
+          <h5 className="text-md italic ml-auto">
             {start ? formattedDate : "Date TBA"}
           </h5>
         ) : (
-          <h5 className="text-md italic">{eventType}</h5>
+          <h5 className="text-md italic ml-auto">{eventType}</h5>
         )}
       </div>
     </div>

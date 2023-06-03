@@ -158,21 +158,21 @@ export default function Detail({ eventData, newImageUrls }) {
                 }
               />
             </div>
-            <p className="flex items-center">
+            <div className="flex items-center">
               <FaMapMarkerAlt className="inline text-white" />
               &nbsp;&nbsp;
               {eventData.city
-                ? eventData.city
-                : eventData.isMultipleLocations && "Multiple Locations"}
+                ? `${eventData.city}, `
+                : eventData.isMultipleLocations && "Multiple Locations, "}
               {eventData.country
-                ? `, ${eventData.country}`
-                : eventData.isGlobal && ", Global"}
+                ? eventData.country
+                : eventData.isGlobal && "Global"}
               {eventData.isOnline && (
                 <div className="flex bg-emerald-500 font-bold text-sm ml-2 py-0.5 px-2 rounded-full">
                   ONLINE
                 </div>
               )}
-            </p>
+            </div>
             <p>
               <FaCalendar className="inline text-white" />
               &nbsp;&nbsp;
@@ -206,7 +206,7 @@ export default function Detail({ eventData, newImageUrls }) {
                   <FaAddressCard className="inline text-darkblue" />
                   &nbsp; Contact
                 </h4>
-                <div className="mx-2">
+                <div>
                   {eventData.email ? (
                     <p className="text-sm lg:text-base">
                       <FaEnvelope className="inline text-darkblue" />
