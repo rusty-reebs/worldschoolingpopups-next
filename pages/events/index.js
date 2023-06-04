@@ -11,6 +11,7 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 
 // TODO About component in react-modern-drawer?
 // TODO pagination
+// TODO update to react-icons
 // TODO ✅ production / dev environments, including Cloudinary test
 // TODO clean Cloudinary media library
 // TODO ✅ update Full School Year to Follows School Year
