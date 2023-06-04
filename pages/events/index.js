@@ -176,12 +176,6 @@ export default function Events({ events, lastUpdated }) {
             ))}
           </div>
         )}
-        {/* <Link
-          href="/events/map"
-          className="fixed inset-x-0 bottom-8 z-10 text-center lg:text-lg"
-        >
-          <Button name="Map" mapIcon="true" />
-        </Link> */}
       </div>
     </>
   );

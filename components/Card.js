@@ -4,19 +4,19 @@ import CardTextBlock from "./CardTextBlock";
 import ReactCountryFlag from "react-country-flag";
 
 export default function Card({
-  event: {
-    imageUrl,
-    name,
-    country,
-    countryCode,
-    isGlobal,
-    start,
-    end,
-    eventType,
-    isArchived,
-    isUnavailable,
-    isOnline,
-  },
+  // event: {
+  imageUrl,
+  name,
+  country,
+  countryCode,
+  isGlobal,
+  start,
+  end,
+  eventType,
+  isArchived,
+  isUnavailable,
+  isOnline,
+  // },
 }) {
   const [isLoading, setIsLoading] = useState(true);
   let today = new Date();
