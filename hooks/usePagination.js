@@ -1,8 +1,6 @@
 import { dotts } from "../components/Pagination";
 
-const getPages = (length, inc = 1) => {
-  Array.from({ length }, (_, i) => i + inc);
-};
+const getPages = (length, inc = 1) => Array.from({ length }, (_, i) => i + inc);
 
 export default function usePagination(total, currentPage, perPage) {
   const totalPages = Math.ceil(total / perPage);

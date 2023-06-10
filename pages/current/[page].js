@@ -1,5 +1,8 @@
 import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
+import { transformImages } from "../../_helpers/cloudinary";
+
+const tableName = "current";
 
 export const PER_PAGE = 12;
 
@@ -15,17 +18,10 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   const page = Number(params?.page) || 1;
   try {
-    const { data } = await supabaseClient
-      .from("current")
-      .select("*")
-      //   .neq("isArchived")
-      //   .neq("isUnavailable")
-      //   .gt("end", new Date())
-      //   .neq("end", null)
-      //   .order("eventType", { ascending: true })
-      //   .order("start", { ascending: false })
-      //   .limit(PER_PAGE)
-      .range((page - 1) * PER_PAGE, page * PER_PAGE);
+    const { data, count } = await supabaseClient
+      .from(tableName)
+      .select("*", { count: "exact" })
+      .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
 
     if (!data.length) {
       return {
@@ -42,11 +38,17 @@ export const getStaticProps = async ({ params }) => {
         },
       };
     }
+    const result = data.map((event) => {
+      const transformedImage = transformImages([event.images[0]]);
+      const newUrl = transformedImage.toURL();
+      const { images, ...rest } = event;
+      return { ...rest, imageUrl: newUrl };
+    });
 
     return {
       props: {
-        events: data,
-        total: data.length,
+        events: result,
+        total: count,
         currentPage: page,
       },
       revalidate: 60 * 60 * 24, // ISR cache: once a day
