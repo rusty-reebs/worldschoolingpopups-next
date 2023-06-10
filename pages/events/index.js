@@ -11,6 +11,7 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 
 // TODO About component in react-modern-drawer?
 // TODO pagination
+// TODO ✅ date sorting - soonest should be at top
 // TODO update to react-icons
 // TODO ✅ production / dev environments, including Cloudinary test
 // TODO clean Cloudinary media library
@@ -42,7 +43,7 @@ export async function getStaticProps() {
       .from(tableName)
       .select("*")
       .order("eventType", { ascending: true })
-      .order("start", { ascending: false });
+      .order("start", { ascending: true });
     // console.log("supabase data", data);
     // get url for transformed cover images
     const result = data.map((event) => {
