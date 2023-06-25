@@ -11,6 +11,7 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 
 // TODO About component in react-modern-drawer?
 // TODO pagination
+// TODO try tailwind 'truncate' for text overflow
 // TODO ✅ date sorting - soonest should be at top
 // TODO update to react-icons
 // TODO ✅ production / dev environments, including Cloudinary test
