@@ -3,7 +3,6 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
-const tableViewName = "current";
 const tableName = "production";
 
 export const getStaticProps = async () => {
@@ -16,7 +15,7 @@ export const getStaticProps = async () => {
       .single();
 
     const { data, count } = await supabaseClient
-      .from(tableViewName)
+      .from(tableName)
       .select("*", { count: "exact" })
       .limit(PER_PAGE);
 
@@ -40,10 +39,10 @@ export const getStaticProps = async () => {
   }
 };
 
-export default function Current({ events, lastUpdated, total, currentPage }) {
+export default function All({ events, lastUpdated, total, currentPage }) {
   return (
     <PaginationPage
-      filter={"current"}
+      filter={"all"}
       events={events}
       lastUpdated={lastUpdated}
       currentPage={currentPage}

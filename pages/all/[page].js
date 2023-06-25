@@ -1,12 +1,22 @@
-import { PER_PAGE } from "./[page]";
 import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
-const tableViewName = "current";
 const tableName = "production";
 
-export const getStaticProps = async () => {
+export const PER_PAGE = 12;
+
+export const getStaticPaths = async () => {
+  return {
+    // prerender the next 5 pages after the first, which is handled by the index page
+    paths: Array.from({ length: 3 }).map((_, i) => `/all/${i + 2}`),
+    // block request for non-generated pages and cache them in the background
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const page = Number(params?.page) || 1;
   try {
     const { data: lastUpdated } = await supabaseClient
       .from(tableName)
@@ -16,10 +26,25 @@ export const getStaticProps = async () => {
       .single();
 
     const { data, count } = await supabaseClient
-      .from(tableViewName)
+      .from(tableName)
       .select("*", { count: "exact" })
-      .limit(PER_PAGE);
+      .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
 
+    if (!data.length) {
+      return {
+        notFound: true,
+      };
+    }
+
+    // redirect the first page to /all to avoid duplicated content
+    if (page === 1) {
+      return {
+        redirect: {
+          destination: "/all",
+          permanent: false,
+        },
+      };
+    }
     const result = data.map((event) => {
       const transformedImage = transformImages([event.images[0]]);
       const newUrl = transformedImage.toURL();
@@ -32,18 +57,24 @@ export const getStaticProps = async () => {
         events: result,
         lastUpdated: lastUpdated.updated,
         total: count,
-        currentPage: 1,
+        currentPage: page,
       },
+      revalidate: 60 * 60 * 24, // ISR cache: once a day
     };
   } catch (err) {
     console.log(err);
   }
 };
 
-export default function Current({ events, lastUpdated, total, currentPage }) {
+export default function PaginatedPage({
+  events,
+  lastUpdated,
+  currentPage,
+  total,
+}) {
   return (
     <PaginationPage
-      filter={"current"}
+      filter={"all"}
       events={events}
       lastUpdated={lastUpdated}
       currentPage={currentPage}

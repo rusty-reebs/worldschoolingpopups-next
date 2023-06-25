@@ -54,7 +54,7 @@ export default function Card({
           />
         </div>
       </div>
-      <h4 className="text-lg">{name}</h4>
+      <h4 className="text-lg truncate">{name}</h4>
       <div className="flex justify-between flex-wrap">
         <div className="flex text-md italic">
           {isGlobal ? (

@@ -3,7 +3,7 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
-const tableViewName = "current";
+const tableViewName = "completed";
 const tableName = "production";
 
 export const getStaticProps = async () => {
@@ -40,10 +40,10 @@ export const getStaticProps = async () => {
   }
 };
 
-export default function Current({ events, lastUpdated, total, currentPage }) {
+export default function Completed({ events, lastUpdated, total, currentPage }) {
   return (
     <PaginationPage
-      filter={"current"}
+      filter={"completed"}
       events={events}
       lastUpdated={lastUpdated}
       currentPage={currentPage}

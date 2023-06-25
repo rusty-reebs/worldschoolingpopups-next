@@ -9,7 +9,9 @@ import { useRouter } from "next/router";
 import { format } from "date-fns";
 
 export default function PaginationPage({
+  filter,
   currentPage,
+  lastUpdated,
   total,
   perPage,
   events,
@@ -40,11 +42,10 @@ export default function PaginationPage({
               : router.pathname.includes("/archived")
               ? "Archived"
               : "All"}{" "}
-            <Badge number={events.length} />
+            <Badge number={total} />
           </div>
           <div className="flex justify-center xl:justify-normal items-center xl:ml-auto italic text-sm lg:text-base">
-            Last updated:
-            {/* {format(new Date(lastUpdated), "MMM d, yyyy")} */}
+            Last updated: {format(new Date(lastUpdated), "MMM d, yyyy")}
           </div>
         </div>
         {!events.length ? (
@@ -74,7 +75,7 @@ export default function PaginationPage({
           total={total}
           currentPage={currentPage}
           perPage={perPage}
-          renderPageLink={(page) => `/current/${page}`}
+          renderPageLink={(page) => `/${filter}/${page}`}
         />
       </div>
     </>
