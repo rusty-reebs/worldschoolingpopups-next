@@ -8,6 +8,7 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 // import { GoogleAnalytics } from "nextjs-google-analytics";
 // import * as gtag from "../lib/gtag";
 import { useRouter } from "next/router";
+import { Analytics } from "@vercel/analytics/react";
 
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function App({ Component, pageProps }) {
         <FilterProvider>
           {/* <GoogleAnalytics trackPageViews /> */}
           <Component {...pageProps} />
+          <Analytics />
         </FilterProvider>
         <Script src="https://upload-widget.cloudinary.com/global/all.js" />
         {/* <Script
