@@ -6,8 +6,9 @@ import { useState, useEffect } from "react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 // import { GoogleAnalytics } from "nextjs-google-analytics";
-import * as gtag from "../lib/gtag";
+// import * as gtag from "../lib/gtag";
 import { useRouter } from "next/router";
+import { Analytics } from "@vercel/analytics/react";
 
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 
@@ -20,15 +21,15 @@ export default function App({ Component, pageProps }) {
     )
   );
 
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      gtag.pageview(url);
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events]);
+  // useEffect(() => {
+  //   const handleRouteChange = (url) => {
+  //     gtag.pageview(url);
+  //   };
+  //   router.events.on("routeChangeComplete", handleRouteChange);
+  //   return () => {
+  //     router.events.off("routeChangeComplete", handleRouteChange);
+  //   };
+  // }, [router.events]);
 
   return (
     <main
@@ -41,9 +42,10 @@ export default function App({ Component, pageProps }) {
         <FilterProvider>
           {/* <GoogleAnalytics trackPageViews /> */}
           <Component {...pageProps} />
+          <Analytics />
         </FilterProvider>
         <Script src="https://upload-widget.cloudinary.com/global/all.js" />
-        <Script
+        {/* <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
         />
@@ -60,7 +62,7 @@ export default function App({ Component, pageProps }) {
           });
           `,
           }}
-        />
+        /> */}
       </SessionContextProvider>
     </main>
   );
