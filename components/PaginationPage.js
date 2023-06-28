@@ -71,12 +71,14 @@ export default function PaginationPage({
             ))}
           </div>
         )}
-        <Pagination
-          total={total}
-          currentPage={currentPage}
-          perPage={perPage}
-          renderPageLink={(page) => `/${filter}/${page}`}
-        />
+        {total > perPage && (
+          <Pagination
+            total={total}
+            currentPage={currentPage}
+            perPage={perPage}
+            renderPageLink={(page) => `/${filter}/${page}`}
+          />
+        )}
       </div>
     </>
   );
