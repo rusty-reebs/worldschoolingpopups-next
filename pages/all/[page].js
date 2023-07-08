@@ -2,14 +2,28 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
-const tableName = "production";
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 
 export const PER_PAGE = 12;
 
 export const getStaticPaths = async () => {
+  const { data, count } = await supabaseClient
+    .from(tableName)
+    .select("*", { count: "exact" });
+
+  if (count < PER_PAGE)
+    return {
+      paths: [],
+      fallback: false,
+    };
+  let arrayLength = null;
+  if (count < PER_PAGE * 2) arrayLength = 1;
+  if (count < PER_PAGE * 3) arrayLength = 2;
+  if (count > PER_PAGE * 3) arrayLength = 3;
+
   return {
-    // prerender the next 5 pages after the first, which is handled by the index page
-    paths: Array.from({ length: 3 }).map((_, i) => `/all/${i + 2}`),
+    // prerender the next pages after the first, which is handled by the index page
+    paths: Array.from({ length: arrayLength }).map((_, i) => `/all/${i + 2}`),
     // block request for non-generated pages and cache them in the background
     fallback: "blocking",
   };
@@ -17,6 +31,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }) => {
   const page = Number(params?.page) || 1;
+  const offset = (page - 1) * PER_PAGE;
   try {
     const { data: lastUpdated } = await supabaseClient
       .from(tableName)
@@ -28,7 +43,12 @@ export const getStaticProps = async ({ params }) => {
     const { data, count } = await supabaseClient
       .from(tableName)
       .select("*", { count: "exact" })
-      .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+      .order("eventType")
+      .order("isArchived")
+      .order("isUnavailable")
+      .order("start", { ascending: false })
+      .order("id")
+      .range(offset, offset + PER_PAGE - 1);
 
     if (!data.length) {
       return {

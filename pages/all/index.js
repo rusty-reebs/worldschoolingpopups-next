@@ -3,7 +3,7 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
-const tableName = "production";
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 
 export const getStaticProps = async () => {
   try {
@@ -17,6 +17,11 @@ export const getStaticProps = async () => {
     const { data, count } = await supabaseClient
       .from(tableName)
       .select("*", { count: "exact" })
+      .order("eventType")
+      .order("isArchived")
+      .order("isUnavailable")
+      .order("start", { ascending: false })
+      .order("id")
       .limit(PER_PAGE);
 
     const result = data.map((event) => {

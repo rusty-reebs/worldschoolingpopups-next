@@ -2,8 +2,8 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 const tableViewName = "completed";
-const tableName = "production";
 
 export const PER_PAGE = 12;
 
@@ -23,7 +23,7 @@ export const getStaticPaths = async () => {
   if (count > PER_PAGE * 3) arrayLength = 3;
 
   return {
-    // prerender the next 5 pages after the first, which is handled by the index page
+    // prerender the next pages after the first, which is handled by the index page
     paths: Array.from({ length: arrayLength }).map(
       (_, i) => `/completed/${i + 2}`
     ),
@@ -34,6 +34,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }) => {
   const page = Number(params?.page) || 1;
+  const offset = (page - 1) * PER_PAGE;
   try {
     const { data: lastUpdated } = await supabaseClient
       .from(tableName)
@@ -45,7 +46,7 @@ export const getStaticProps = async ({ params }) => {
     const { data, count } = await supabaseClient
       .from(tableViewName)
       .select("*", { count: "exact" })
-      .range((page - 1) * PER_PAGE, page * PER_PAGE - 1);
+      .range(offset, offset + PER_PAGE - 1);
 
     if (!data.length) {
       return {

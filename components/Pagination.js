@@ -28,7 +28,7 @@ export default function Pagination({
               pageNumber === currentPage
                 ? "bg-darkblue/90 text-white hover:border-none hover:m-0"
                 : "bg-lightblue"
-            } px-4 py-2 rounded-full text-sm font-semibold no-underline hover:border-2 hover:border-orange hover:-m-[2px] hover:cursor-pointer`}
+            } px-4 py-2 rounded-full text-sm shadow-lg font-semibold no-underline hover:border-2 hover:border-orange hover:-m-[2px] hover:cursor-pointer`}
           >
             {pageNumber}
           </Link>

@@ -12,11 +12,12 @@ import { supabaseClient } from "@/components/lib/supabaseClient";
 
 // TODO About component in react-modern-drawer?
 // TODO pagination and remove filter context
-// TODO check for correct totals on filters/table views
+// TODO ✅ check for correct totals on filters/table views
+// TODO remove lastUpdated call from all pages, call once and pass
 // TODO ✅ remove pagination when only one page
 // TODO check console 404 error in local production for /archived and /unavailable
 // TODO ✅ /events redirects to /current
-// TODO completed events reverse order
+// TODO ✅ completed events reverse order
 // TODO ✅ try tailwind 'truncate' for text overflow
 // TODO ✅ date sorting - soonest should be at top
 // TODO update to react-icons

@@ -3,8 +3,8 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 const tableViewName = "current";
-const tableName = "production";
 
 export const getStaticProps = async () => {
   try {

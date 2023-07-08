@@ -3,7 +3,7 @@ import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
 
-const tableName = "production";
+const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 
 export const getStaticProps = async () => {
   try {
