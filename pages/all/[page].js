@@ -79,7 +79,7 @@ export const getStaticProps = async ({ params }) => {
         total: count,
         currentPage: page,
       },
-      revalidate: 60 * 60 * 24, // ISR cache: once a day
+      // revalidate: 60 * 60 * 24, // ISR cache: once a day
     };
   } catch (err) {
     console.log(err);

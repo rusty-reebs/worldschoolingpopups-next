@@ -42,7 +42,7 @@ export default function Nav() {
       </div>
       <div className="toggle hidden lg:flex w-full lg:w-auto text-center text-bold mt-5 lg:mt-0 border-t-2 border-lightblue lg:border-none">
         <Link
-          href="/events"
+          href="/current"
           className="block lg:inline-block text-lightblue hover:text-white px-3 py-3 border-b-2 border-lightblue lg:border-none lg:text-lg"
         >
           🏠&nbsp;&nbsp;Home
