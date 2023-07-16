@@ -2,6 +2,7 @@ import { PER_PAGE } from "./[page]";
 import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
+import Head from "next/Head";
 
 const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 const tableViewName = "completed";
@@ -42,13 +43,23 @@ export const getStaticProps = async () => {
 
 export default function Completed({ events, lastUpdated, total, currentPage }) {
   return (
-    <PaginationPage
-      filter={"completed"}
-      events={events}
-      lastUpdated={lastUpdated}
-      currentPage={currentPage}
-      total={total}
-      perPage={PER_PAGE}
-    />
+    <div>
+      <Head>
+        <title>worldschoolingpopups.com - Completed Events</title>
+        <meta
+          name="description"
+          content="Your go-to resource for worldschooling events, hubs, and popups!"
+          key="desc"
+        />
+      </Head>
+      <PaginationPage
+        filter={"completed"}
+        events={events}
+        lastUpdated={lastUpdated}
+        currentPage={currentPage}
+        total={total}
+        perPage={PER_PAGE}
+      />
+    </div>
   );
 }

@@ -24,7 +24,7 @@ export default function Document() {
         <link rel="manifest" href="/site.webmanifest" />
         <meta
           name="description"
-          content="worldschoolingpopups.com | your go-to resource for worldwide events and popups!"
+          content="worldschoolingpopups.com | your go-to resource for worldschooling events, hubs, and popups!"
         />
       </Head>
       <body>
