@@ -2,7 +2,7 @@ import { PER_PAGE } from "./[page]";
 import PaginationPage from "../../components/PaginationPage";
 import { supabaseClient } from "../../lib/supabaseClient";
 import { transformImages } from "../../_helpers/cloudinary";
-import Head from "next/Head";
+import Head from "next/head";
 
 const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 const tableViewName = "current";

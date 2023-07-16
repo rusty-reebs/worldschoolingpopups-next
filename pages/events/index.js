@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import Head from "next/Head";
+import Head from "next/head";
 
 // TODO About component in react-modern-drawer?
 // TODO pagination and remove filter context
