@@ -23,9 +23,7 @@ export const getStaticPaths = async () => {
   if (count > PER_PAGE * 3) arrayLength = 3;
   return {
     // prerender the next 3 pages after the first, which is handled by the index page
-    paths: Array.from({ length: arrayLength }).map(
-      (_, i) => `/unavailable/${i + 2}`
-    ),
+    paths: Array.from({ length: arrayLength }).map((_, i) => `/unavailable/${i + 2}`),
     // block request for non-generated pages and cache them in the background
     fallback: "blocking",
   };
@@ -86,19 +84,14 @@ export const getStaticProps = async ({ params }) => {
         total: count,
         currentPage: page,
       },
-      // revalidate: 60 * 60 * 24, // ISR cache: once a day
+      revalidate: 60 * 60 * 24, // 24 hours
     };
   } catch (err) {
     console.log(err);
   }
 };
 
-export default function PaginatedPage({
-  events,
-  lastUpdated,
-  currentPage,
-  total,
-}) {
+export default function PaginatedPage({ events, lastUpdated, currentPage, total }) {
   return (
     <PaginationPage
       filter={"unavailable"}

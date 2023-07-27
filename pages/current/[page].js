@@ -8,9 +8,7 @@ const tableViewName = "current";
 export const PER_PAGE = 12;
 
 export const getStaticPaths = async () => {
-  const { data, count } = await supabaseClient
-    .from(tableViewName)
-    .select("*", { count: "exact" });
+  const { data, count } = await supabaseClient.from(tableViewName).select("*", { count: "exact" });
 
   if (count < PER_PAGE)
     return {
@@ -24,9 +22,7 @@ export const getStaticPaths = async () => {
 
   return {
     // prerender the next pages after the first, which is handled by the index page
-    paths: Array.from({ length: arrayLength }).map(
-      (_, i) => `/current/${i + 2}`
-    ),
+    paths: Array.from({ length: arrayLength }).map((_, i) => `/current/${i + 2}`),
     // block request for non-generated pages and cache them in the background
     fallback: "blocking",
   };
@@ -77,19 +73,14 @@ export const getStaticProps = async ({ params }) => {
         total: count,
         currentPage: page,
       },
-      // revalidate: 60 * 60 * 24, // ISR cache: once a day
+      revalidate: 60 * 60 * 24, // 24 hours
     };
   } catch (err) {
     console.log(err);
   }
 };
 
-export default function PaginatedPage({
-  events,
-  lastUpdated,
-  currentPage,
-  total,
-}) {
+export default function PaginatedPage({ events, lastUpdated, currentPage, total }) {
   return (
     <PaginationPage
       filter={"current"}

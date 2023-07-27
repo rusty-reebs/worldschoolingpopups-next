@@ -16,10 +16,7 @@ export const getStaticProps = async () => {
       .limit(1)
       .single();
 
-    const { data, count } = await supabaseClient
-      .from(tableViewName)
-      .select("*", { count: "exact" })
-      .limit(PER_PAGE);
+    const { data, count } = await supabaseClient.from(tableViewName).select("*", { count: "exact" }).limit(PER_PAGE);
 
     const result = data.map((event) => {
       const transformedImage = transformImages([event.images[0]]);
@@ -35,6 +32,7 @@ export const getStaticProps = async () => {
         total: count,
         currentPage: 1,
       },
+      revalidate: 60 * 60 * 24, // 24 hours
     };
   } catch (err) {
     console.log(err);

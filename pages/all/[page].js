@@ -7,9 +7,7 @@ const tableName = process.env.NEXT_PUBLIC_TABLE_NAME;
 export const PER_PAGE = 12;
 
 export const getStaticPaths = async () => {
-  const { data, count } = await supabaseClient
-    .from(tableName)
-    .select("*", { count: "exact" });
+  const { data, count } = await supabaseClient.from(tableName).select("*", { count: "exact" });
 
   if (count < PER_PAGE)
     return {
@@ -79,19 +77,14 @@ export const getStaticProps = async ({ params }) => {
         total: count,
         currentPage: page,
       },
-      // revalidate: 60 * 60 * 24, // ISR cache: once a day
+      revalidate: 60 * 60 * 24, // 24 hours
     };
   } catch (err) {
     console.log(err);
   }
 };
 
-export default function PaginatedPage({
-  events,
-  lastUpdated,
-  currentPage,
-  total,
-}) {
+export default function PaginatedPage({ events, lastUpdated, currentPage, total }) {
   return (
     <PaginationPage
       filter={"all"}

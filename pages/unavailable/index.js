@@ -35,18 +35,14 @@ export const getStaticProps = async () => {
         total: count,
         currentPage: 1,
       },
+      revalidate: 60 * 60 * 24, // 24 hours
     };
   } catch (err) {
     console.log(err);
   }
 };
 
-export default function Unavailable({
-  events,
-  lastUpdated,
-  total,
-  currentPage,
-}) {
+export default function Unavailable({ events, lastUpdated, total, currentPage }) {
   return (
     <div>
       <Head>
