@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
   try {
     // Regenerate event listing with new data from Supabase
-    const { eventType } = req.body;
+    const eventType = req.body.type;
     const { id } = req.body.record;
     console.log("👉 eventType", eventType);
     console.log("👉 id", id);
