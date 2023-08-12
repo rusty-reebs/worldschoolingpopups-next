@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Head from "next/head";
 
+// TODO cannot unclick Multiple Locations (beside city)
 // TODO About component in react-modern-drawer?
 // TODO pagination and remove filter context
 // TODO ✅ check for correct totals on filters/table views

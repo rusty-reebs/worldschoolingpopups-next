@@ -6,16 +6,19 @@
 //* count records and divide by per-page to get pages
 //* revalidate each page
 //* also needs to revalidate a specific event route after an update/edit
+//* url for supabase webhook https://worldschoolingpopups-next.vercel.app/api/revalidate
 
 export default async function handler(req, res) {
   // Check for secret to confirm this is a valid request
+  console.log("👉 req.body", req.body);
   if (req.query.secret !== process.env.REVALIDATE_SECRET) {
     return res.status(401).json({ message: "Invalid token" });
   }
   try {
     // Regenerate index route with new data from Supabase
-    await res.revalidate("/events");
-    return res.json({ revalidated: true });
+    // await res.revalidate("/events");
+    // return res.json({ revalidated: true });
+    return res.status(200).json(req.body);
   } catch (err) {
     // if error, will continue to show last successful page
     return res.status(500).send("Error revalidating");
