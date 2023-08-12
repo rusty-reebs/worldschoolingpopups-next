@@ -17,6 +17,8 @@ export default async function handler(req, res) {
     // Regenerate event listing with new data from Supabase
     const { eventType } = req.body;
     const { id } = req.body.record;
+    console.log("👉 eventType", eventType);
+    console.log("👉 id", id);
     if (eventType === "UPDATE") {
       await res.revalidate(`/events/${id}`);
     }
