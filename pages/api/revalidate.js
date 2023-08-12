@@ -10,15 +10,19 @@
 
 export default async function handler(req, res) {
   // Check for secret to confirm this is a valid request
-  console.log("👉 req.body", req.body);
   if (req.query.secret !== process.env.REVALIDATE_SECRET) {
     return res.status(401).json({ message: "Invalid token" });
   }
   try {
+    // Regenerate event listing with new data from Supabase
+    const { eventType } = req.body;
+    const { id } = req.body.record;
+    if (eventType === "UPDATE") {
+      await res.revalidate(`/events/${id}`);
+    }
     // Regenerate index route with new data from Supabase
     // await res.revalidate("/events");
-    // return res.json({ revalidated: true });
-    return res.status(200).json(req.body);
+    return res.status(200).json({ revalidated: true });
   } catch (err) {
     // if error, will continue to show last successful page
     return res.status(500).send("Error revalidating");
