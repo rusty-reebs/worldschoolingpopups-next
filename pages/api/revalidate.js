@@ -17,10 +17,10 @@ export default async function handler(req, res) {
     // Regenerate event listing with new data from Supabase
     const eventType = req.body.type;
     const { id } = req.body.record;
-    console.log("👉 eventType", eventType);
-    console.log("👉 id", id);
+    console.log("👉 Revalidating", eventType, id);
     if (eventType === "UPDATE") {
-      await res.revalidate(`/events/${id}`);
+      const url = `/events/${id}`;
+      await res.revalidate(url);
     }
     // Regenerate index route with new data from Supabase
     // await res.revalidate("/events");

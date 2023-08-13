@@ -32,7 +32,7 @@ export const getStaticProps = async () => {
         total: count,
         currentPage: 1,
       },
-      revalidate: 60 * 60 * 24, // 24 hours
+      revalidate: 60 * 60, // 1 hour
     };
   } catch (err) {
     console.log(err);
