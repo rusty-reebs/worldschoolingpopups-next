@@ -35,42 +35,9 @@ export async function getStaticPaths() {
   }
 }
 
-// export async function getServerSideProps({ params }) {
-//   try {
-//     const { data: eventData } = await supabaseClient
-//       .from(tableName)
-//       .select("*")
-//       .eq("id", params.event);
-
-//     const [eventObj] = eventData;
-
-//     const transformedImages = transformImages(eventObj.images);
-//     let newImageUrls = [];
-//     if (transformedImages.length > 1) {
-//       newImageUrls = transformedImages.map((image) => {
-//         return image.toURL();
-//       });
-//     } else {
-//       newImageUrls = [transformedImages.toURL()];
-//     }
-
-//     return {
-//       props: {
-//         eventData: eventObj,
-//         newImageUrls,
-//       },
-//     };
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
 export async function getStaticProps({ params }) {
   try {
-    const { data: eventData } = await supabaseClient
-      .from(tableName)
-      .select("*")
-      .eq("id", params.event);
+    const { data: eventData } = await supabaseClient.from(tableName).select("*").eq("id", params.event);
 
     const [eventObj] = eventData;
 
@@ -126,18 +93,11 @@ export default function Detail({ eventData, newImageUrls }) {
       <div className="hidden md:flex md:justify-center md:gap-4 md:mb-6 md:w-full">
         {newImageUrls.map((image, index) => {
           return (
-            <div
-              key={index}
-              className="relative aspect-4/3 md:h-44 lg:h-56 xl:h-72"
-            >
+            <div key={index} className="relative aspect-4/3 md:h-44 lg:h-56 xl:h-72">
               <Image
                 src={image}
                 className={`rounded-md 
-                ${
-                  isLoading
-                    ? "grayscale blur-2xl scale-110"
-                    : "grayscale-0 blur-0 scale-100"
-                }`}
+                ${isLoading ? "grayscale blur-2xl scale-110" : "grayscale-0 blur-0 scale-100"}`}
                 alt={"eventimage" + index}
                 fill
                 priority
@@ -156,24 +116,16 @@ export default function Detail({ eventData, newImageUrls }) {
               <DetailTextBlock
                 isArchived={eventData.isArchived}
                 isUnavailable={eventData.isUnavailable}
-                isCompleted={
-                  today > new Date(eventData.end) && eventData.start !== null
-                }
+                isCompleted={today > new Date(eventData.end) && eventData.start !== null}
               />
             </div>
             <div className="flex items-center">
               <FaMapMarkerAlt className="inline text-white" />
               &nbsp;&nbsp;
-              {eventData.city
-                ? `${eventData.city}, `
-                : eventData.isMultipleLocations && "Multiple Locations, "}
-              {eventData.country
-                ? eventData.country
-                : eventData.isGlobal && "Global"}
+              {eventData.city ? `${eventData.city}, ` : eventData.isMultipleLocations && "Multiple Locations, "}
+              {eventData.country ? eventData.country : eventData.isGlobal && "Global"}
               {eventData.isOnline && (
-                <div className="flex bg-emerald-500 font-bold text-sm ml-2 py-0.5 px-2 rounded-full">
-                  ONLINE
-                </div>
+                <div className="flex bg-emerald-500 font-bold text-sm ml-2 py-0.5 px-2 rounded-full">ONLINE</div>
               )}
             </div>
             <p>
@@ -182,9 +134,7 @@ export default function Detail({ eventData, newImageUrls }) {
               {eventData.eventType === "Fixed Session" && eventData.start
                 ? formattedStart + " - " + formattedEnd
                 : eventData.eventType}
-              {eventData.eventType === "Open / Continuous" ? (
-                <span> Dates</span>
-              ) : null}
+              {eventData.eventType === "Open / Continuous" ? <span> Dates</span> : null}
             </p>
           </div>
         </div>
@@ -200,9 +150,7 @@ export default function Detail({ eventData, newImageUrls }) {
                 </div>
               ) : null}
               <div className="border-b border-orange py-4">
-                <p className="text-base whitespace-pre-line">
-                  {eventData.description}
-                </p>
+                <p className="text-base whitespace-pre-line">{eventData.description}</p>
               </div>
               <div className="border-b border-orange mb-2 py-4">
                 <h4 className="mb-2 font-bold">
@@ -214,10 +162,7 @@ export default function Detail({ eventData, newImageUrls }) {
                     <p className="text-sm lg:text-base">
                       <FaEnvelope className="inline text-darkblue" />
                       &nbsp;&nbsp;
-                      <a
-                        href={"mailto:" + eventData.email}
-                        className="hover:underline"
-                      >
+                      <a href={"mailto:" + eventData.email} className="hover:underline">
                         {eventData.email}
                       </a>
                     </p>
@@ -226,10 +171,7 @@ export default function Detail({ eventData, newImageUrls }) {
                     <p className="break-words">
                       <FaFacebook className="inline text-darkblue" />
                       &nbsp;&nbsp;
-                      <a
-                        href={`https://${eventData.fbPage}`}
-                        className="hover:underline text-xs lg:text-base"
-                      >
+                      <a href={`https://${eventData.fbPage}`} className="hover:underline text-xs lg:text-base">
                         {eventData.fbPage}
                       </a>
                     </p>
@@ -255,9 +197,7 @@ export default function Detail({ eventData, newImageUrls }) {
                 <div className="border-b border-orange mb-2 py-2 md:border-none lg:mb-0 h-96 lg:pl-4">
                   <EmbeddedMap lat={eventData.lat} lon={eventData.lon} />
                 </div>
-                <p className="text-right text-xs italic">
-                  * Location may not be exact.
-                </p>
+                <p className="text-right text-xs italic">* Location may not be exact.</p>
               </div>
             )}
           </div>
